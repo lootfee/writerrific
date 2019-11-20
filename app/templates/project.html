@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="container-fluid">
+	<div id="proj_sidenav_mobile">
+			<nav aria-label="Page navigation">
+			  <ul class="pagination">
+				{% if chapters %}
+				{% for c in chapters %}
+				<li><a href="#{{ c.chapter_title }}_anchor">{{ c.chapter_no }}</a></li>
+				{% endfor %}
+				{% endif %}
+				<li style="float:right;"><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></li>
+			  </ul>
+			 
+			</nav>
+			
+		</div>
+	<div class="row" style="margin-top: 70px;">
+		<div class="col-md-2 col-sm-2 col-xs-2" id="proj_sidenav" style="border-right:solid 2px #808080; position:fixed; height:100%;">
+			{% if project.author == current_user %}
+			{% if form %}
+			<div class="col-md-12">
+				<p><a href="#" data-toggle="modal" data-target="#create_chapter_modal" style="float:right;font-size:10px;">Create chapter</a></p>
+			</div>
+			{% endif %}
+			{% endif %}
+			<br>
+			<div class="col-md-12" style="height:60%;overflow-y:auto;overflow-x:hidden;">
+				<ul class="list-group" style="list-style-type:none;">
+				{% if chapters %}
+				{% for c in chapters %}
+					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if project.author == current_user %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}</li>
+				{% endfor %}
+				{% endif %}
+				<li></li>
+				</ul>
+				<div class="col-md-12" style="margin-bottom: 0;">
+					{% if project.date_published %}
+					<p><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></p>
+					{% endif %}
+				</div>
+				<div class="row" style="margin-bottom:20px;"></div>
+				
+			</div>
+		</div>
+		<div class="col-md-10 col-sm-10 col-xs-10 main_body" style="position:absolute; margin-left: 17%; margin-bottom: 50px;">
+			<div class="row">
+				<div class="text-center">
+					<div class="col-md-2">
+						{% if project.author == current_user %}
+						{% if project.date_published is none %}
+						<span class="col-md-8">{{wtf.quick_form(form1)}}</span>
+						{% endif %}
+						{% endif %}
+					</div>
+					<div class="col-md-8">
+						<h2 style="font-family: serif;font-weight: bold;">{{ project.title }}</h2>
+					</div>
+					<div class="col-md-2">
+						{% if project.author == current_user %}
+						{% if project.date_published is none %}
+						<span class="col-md-4">{{wtf.quick_form(form2)}}</span>
+						{% endif %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div>
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<ul class="list-group">
+						{% if chapters %}
+						{% for c in chapters %}
+						<!--to make href="#id" of section not on top of page-->
+						<span class="anchor" id="{{ c.chapter_title }}_anchor"></span>
+						<section >
+							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title }}</h2><span id="chapter_edit_mobile">{% if project.author == current_user %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}</span></header>
+								<article>
+									{% if c.body %}
+										{{ c.body|safe }}
+									{% endif %}
+								</article>
+							</li>
+						</section> 
+						{% endfor %}
+						{% endif %}
+					</ul>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+		</div>
+	</div>
+	{% if project.author == current_user %}
+	{% if form %}
+	<div class="modal fade" id="create_chapter_modal" tabindex="-1" role="dialog" aria-labelledby="create_chapter_modal_Label">
+	  <div class="modal-dialog" role="document" style="height: 50%;width: 80%;">
+		<div class="modal-content">
+		  <div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{ wtf.quick_form(form) }}
+		  </div>
+		</div>
+	  </div>
+	</div>
+	{% endif %}
+	{% endif %}
+	<div class="modal fade" id="review_modal" tabindex="-1" role="dialog" aria-labelledby="review_modal_Label">
+	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
+		<div class="modal-content">
+		  <div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<form action method="post" class="form" role="form">
+				{{ form3.hidden_tag() }}
+				{{ form3.review.label (class_='control-label')}} <strong >{{project.title}}</strong>
+				{{ form3.review (class_='form-control')}}
+				<br>
+				<div>
+				<span class="col-md-8"><strong>Give a score for {{ project.title }} (1 is bad, 10 is very good.)</strong></span><span class="col-md-2">{{ form3.score (class_='form-control')}}</span>
+				</div>
+				{{ form3.submit (class_='btn btn-default')}}
+			</form>
+			
+		  </div>
+		</div>
+	  </div>
+	</div>
+</div>	
+	
+	
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+	.modal-dialog,
+	.modal-content {
+		/* 80% of window height */
+		height: 80%;
+		width: 60%;
+		margin: 0 auto;
+		margin-top: 10%;
+	}
+
+	.modal-body {
+		/* 100% = dialog height, 120px = header + footer */
+		max-height: calc(100% - 20px);
+		/*overflow-y: scroll;*/
+	}
+	
+	/*to make href="#id" of section not on top of page*/
+	.anchor {
+	  display: block;
+	  height: 100px; /*same height as header*/
+	  margin-top: -100px; /*same height as header*/
+	  visibility: hidden;
+	}
+	
+	img {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	#proj_sidenav_mobile { display: none; }
+	#chapter_edit_mobile { display: none;}
+	@media (max-width: 960px) {
+	  #proj_sidenav     { display: none; }
+	  #proj_sidenav_mobile { 
+		display: inline-block;
+		margin-top: 34px;
+		position: fixed;
+		z-index: 99
+		}
+		#chapter_edit_mobile {
+			display: inline-block;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

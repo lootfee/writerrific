@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="container" style="margin-top:70px; margin-bottom: 40px;">
+    <div class="row">
+		<div class="media col-md-12">
+			<table class="table table-bordered table-hover" style=" border-collapse: separate !important;;border-radius: 1em;overflow: hidden; margin-bottom:5px;">
+				<tr>
+					<td>
+						<h1 class="text-center">{{ project.title }}</h1>
+						<a href="{{url_for('user', username=project.author.username)}}"><div class="text-center">Author: {{ project.author.username }}</div></a>
+					</td>
+					
+				</tr>
+				<tr>
+					<td>{{ project.synopsis }}</td>
+				</tr>
+				<tr>
+					<td>
+					<span class="col-md-3">
+							{% if project.upvoted(current_user) %}
+							<span class="btn btn-primary upvote" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('upvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"style="color:white;"></span></a></span>
+							{% else %}
+							<span class="btn btn-default upvote" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('upvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a></span>
+							{% endif %}
+							<span style="font-size: 11px;font-style:italic;color:blue;"> {% if project.upvotes %}{{ project.upvoters.count()}} {% else %}0 {% endif %} </span>
+						
+							{% if project.downvoted(current_user) %}
+							<span class="btn btn-danger" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('downvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color:white;"></span></a></span>
+							{% else %}
+							<span class="btn btn-default" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('downvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a></span>
+							{% endif %}
+							<span style="font-size: 11px;font-style:italic;color:red;"> {% if project.downvotes %}{{ project.downvoters.count() }} {% else %}0 {% endif %}</span>
+						
+					</span>
+					<span class="col-md-6 text-center">
+						{% if project.date_published %}
+						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Book score: {% for p in project.ratings %}{{ p.score }}{% endfor %}</span>
+						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Author score: {{ project.ratings.score }}</span>
+						{% endif %}
+					</span>
+					<span class="col-md-3" >
+						{% if project.date_published %}
+						<div style="float:right;">
+						{% if project.is_purchased(current_user)%}
+						<a href="{{ url_for('project', id=project.id, title=project.title) }}"><input class="btn btn-primary" value="View in library"></a>
+						{% elif project.author == current_user %}
+						<a href="{{ url_for('project', id=project.id, title=project.title)}}"><input class="btn btn-default" value="View in portfolio"></a>
+						{% else %}
+						<a href="{{ url_for('add_to_library', id=project.id)}}"><input class="btn btn-default" value="Add to library"></a>
+						{% endif %}
+						</div>
+						{% endif %}
+					</span>
+					</td>
+				</tr>
+			</table>
+			<div class="col-md-12"><span><a href="#" id="view_comments">Comments</a></span>{% if project.date_published %}<span><a href="#" id="view_reviews"> &nbsp;&nbsp;Reviews</a></span>{% endif %}</div>
+			<div class="col-md-12" id="comment_form">
+			<br>
+				<div class="col-md-1">
+				</div>
+				{% if form %}
+				<div class="col-md-10">
+					<form action method="post" class="form" role="form">
+						{{ form.hidden_tag() }}
+						<div class="form-group required">
+							{{ form.comment.label (class_="control-label")}}
+							<span id="comment_count" style="float:right; font-size:10px;"></span>
+							{{ form.comment(class_="form-control") }}
+						</div>
+						{{ form.submit (class_="btn btn-default") }}
+					</form>
+				</div>
+				{% endif %}
+				<div class="col-md-1">
+				</div>
+			</div>
+			<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-1">
+				</div>
+				{% if project.date_published %}
+				<div class="col-md-10"  id="review_container">
+					<p><strong>Reviews: </strong></p>
+					{% for review in reviews %}
+						{% include '_review.html' %}
+					{% endfor %}
+				</div>
+				{% endif %}
+				<div class="col-md-10" id="comment_container">
+					<p><strong>Comments: </strong></p>
+					{% for comment in comments %}
+						{% include '_comment.html' %}
+					{% endfor %}
+				</div>
+				<div class="col-md-1">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script>
+$(document).ready(function(){
+	{% if project.date_published %}
+	$("#comment_form").hide();
+	$("#comment_container").hide();
+	$("#review_container").show();
+	{% else %}
+	$("#comment_form").show();
+	$("#comment_container").show();
+	{% endif %}
+	
+	$("#view_comments").click(function(){
+		$("#comment_form").show();
+		$("#comment_container").show();
+		$("#review_container").hide();
+	});
+	
+	$("#view_reviews").click(function(){
+		$("#comment_form").hide();
+		$("#comment_container").hide();
+		$("#review_container").show();
+	});
+});
+</script>
+{% endblock %}

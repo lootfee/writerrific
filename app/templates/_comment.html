@@ -1,0 +1,14 @@
+<table class="table table-bordered" style=" border-collapse: separate !important;;border-radius: 1em;overflow: hidden; margin-bottom:5px;">
+	<tr>
+		<td width="25px">
+			<a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a>
+			<span style="font-size: 10px;">{{ moment(comment.timestamp).calendar() }}</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p>{{ comment.body }}</p>
+			</a>		
+		</td>		
+	</tr>		
+</table>

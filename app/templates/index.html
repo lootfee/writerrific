@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="container" style="margin-top: 70px;">
+	{% if projects %}
+	<h2>View published works.</h2>
+    {% for project in projects %}
+		{% include '_project.html' %}
+    {% endfor %}
+	{% elif for_advice_projects %}
+	<h2>Give advice on unpublished works.</h2>
+    {% for project in for_advice_projects %}
+		{% include '_project.html' %}
+    {% endfor %}
+	{% endif %}
+	<nav aria-label="...">
+	  <ul class="pager">
+		{% if prev_url %}
+		<li class="previous"><a href="{{ prev_url }}><span aria-hidden="true">&larr;</span> Older</a></li>
+		{% endif %}
+		{% if next_url %}
+		<li class="next"><a href="{{ next_url }}">Newer <span aria-hidden="true">&rarr;</span></a></li>
+		 {% endif %}
+	  </ul>
+	</nav>
+</div>
+{% endblock %}
