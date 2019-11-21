@@ -20,10 +20,12 @@
 	<div class="row" style="margin-top: 70px;">
 		<div class="col-md-2 col-sm-2 col-xs-2" id="proj_sidenav" style="border-right:solid 2px #808080; position:fixed; height:100%;">
 			{% if project.author == current_user %}
+			{% if project.date_published is none %}
 			{% if form %}
 			<div class="col-md-12">
 				<p><a href="#" data-toggle="modal" data-target="#create_chapter_modal" style="float:right;font-size:10px;">Create chapter</a></p>
 			</div>
+			{% endif %}
 			{% endif %}
 			{% endif %}
 			<br>
@@ -31,43 +33,47 @@
 				<ul class="list-group" style="list-style-type:none;">
 				{% if chapters %}
 				{% for c in chapters %}
-					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if project.author == current_user %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}</li>
+					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if project.author == current_user %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}</li>
 				{% endfor %}
 				{% endif %}
 				<li></li>
 				</ul>
 				<div class="col-md-12" style="margin-bottom: 0;">
 					{% if project.date_published %}
+					{% if project.is_rated(current_user)%}
+					<p><a href="#" data-toggle="modal" data-target="#review_modal" >You scored this book a {{project.is_score(current_user)}}.</a></p>
+					{% else %}
 					<p><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></p>
+					{% endif %}
 					{% endif %}
 				</div>
 				<div class="row" style="margin-bottom:20px;"></div>
 				
 			</div>
 		</div>
-		<div class="col-md-10 col-sm-10 col-xs-10 main_body" style="position:absolute; margin-left: 17%; margin-bottom: 50px;">
+		<div class="col-md-10 col-sm-12 col-xs-12 main_body" style="position:absolute; margin-bottom: 50px;">
 			<div class="row">
-				<div class="text-center">
-					<div class="col-md-2">
-						{% if project.author == current_user %}
-						{% if project.date_published is none %}
-						<span class="col-md-8">{{wtf.quick_form(form1)}}</span>
-						{% endif %}
-						{% endif %}
-					</div>
-					<div class="col-md-8">
-						<h2 style="font-family: serif;font-weight: bold;">{{ project.title }}</h2>
-					</div>
-					<div class="col-md-2">
-						{% if project.author == current_user %}
-						{% if project.date_published is none %}
-						<span class="col-md-4">{{wtf.quick_form(form2)}}</span>
-						{% endif %}
-						{% endif %}
-					</div>
+				<div class="col-md-2 col-sm-1 col-xs-1">
+					{% if project.author == current_user %}
+					{% if project.date_published is none and project.date_seek_review is none %}
+					{{wtf.quick_form(form1)}}
+					{% elif project.date_published is none and project.date_seek_review %}
+					<span><a href="{{url_for('project_synopsis', id=project.id, title=project.title )}}"><button class="btn btn-default">Check comments</button></a></span>
+					{% endif %}
+					{% endif %}
+				</div>
+				<div class="col-md-8 col-sm-8 col-xs-8 text-center">
+					<h2 style="font-family: serif;font-weight: bold;">{{ project.title }}</h2>
+				</div>
+				<div class="col-md-2 col-sm-1 col-xs-1">
+					{% if project.author == current_user %}
+					{% if project.date_published is none %}
+					{{wtf.quick_form(form2)}}
+					{% endif %}
+					{% endif %}
 				</div>
 			</div>
-			<div>
+			<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<ul class="list-group">
@@ -93,6 +99,7 @@
 		</div>
 	</div>
 	{% if project.author == current_user %}
+	{% if project.date_published is none %}
 	{% if form %}
 	<div class="modal fade" id="create_chapter_modal" tabindex="-1" role="dialog" aria-labelledby="create_chapter_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 50%;width: 80%;">
@@ -106,6 +113,8 @@
 	</div>
 	{% endif %}
 	{% endif %}
+	{% endif %}
+	{% if project.date_published %}
 	<div class="modal fade" id="review_modal" tabindex="-1" role="dialog" aria-labelledby="review_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
 		<div class="modal-content">
@@ -121,11 +130,11 @@
 				</div>
 				{{ form3.submit (class_='btn btn-default')}}
 			</form>
-			
 		  </div>
 		</div>
 	  </div>
 	</div>
+	{% endif %}
 </div>	
 	
 	
@@ -165,6 +174,9 @@
 	
 	#proj_sidenav_mobile { display: none; }
 	#chapter_edit_mobile { display: none;}
+	.main_body {
+		margin-left: 17%;
+	}
 	@media (max-width: 960px) {
 	  #proj_sidenav     { display: none; }
 	  #proj_sidenav_mobile { 
@@ -175,6 +187,9 @@
 		}
 		#chapter_edit_mobile {
 			display: inline-block;
+		}
+		.main_body {
+			margin-left: 0;
 		}
 	}
 </style>

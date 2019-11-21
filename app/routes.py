@@ -111,8 +111,21 @@ def user(username):
 		if form2.validate_on_submit():
 			edit_proj = Project.query.filter_by(id=form2.proj_id.data).first()
 			edit_proj.title = form2.edit_title.data
-			edit_proj.edit_genre = form2.edit_genre.data
+			#edit_proj.edit_genre = form2.edit_genre.data
 			edit_proj.synopsis = form2.edit_synopsis.data
+			edit_genres = form2.edit_genre.data
+			edit_genre_list = edit_genres.split(',')
+			for g in edit_genre_list:
+				g_query = Genre.query.filter_by(name=g).first()
+				if g_query is None:
+					gname = Genre(name=g)
+					db.session.add(gname)
+					edit_proj.genre.append(gname)
+					db.session.commit()
+				elif not edit_proj.is_genre(g_query):
+					edit_proj.genre.append(g_query)
+					db.session.commit()
+			#return redirect(url_for('user', username=current_user.username))
 			db.session.commit()
 			return redirect(url_for('user', username=current_user.username))
 	'''elif request.method == 'GET':

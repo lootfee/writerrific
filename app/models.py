@@ -138,6 +138,18 @@ class Project(db.Model):
 	def is_purchased(self, user):
 		return self.books.filter(
 			library.c.user_id == user.id).count() > 0
+			
+	def is_rated(self, user):
+		return self.ratings.filter(
+			Rating.user_id == user.id).count() > 0
+			
+	def is_score(self, user):
+		return self.ratings.filter(
+			Rating.user_id == user.id).first().score
+			
+	def is_genre(self, genre):
+		return self.genre.filter(
+			genres.c.genre_id == genre.id).count() > 0
 		
 	def voted(self, user):
 		return self.voters.filter(votes.c.user_id == user.id).count() > 0

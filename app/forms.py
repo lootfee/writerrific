@@ -87,10 +87,10 @@ class EditChapterForm(FlaskForm):
 	save = SubmitField('Save')
 
 class PublishForm(FlaskForm):
-	submit = SubmitField('Publish')
+	publish = SubmitField('Publish')
 	
 class CommentReviewForm(FlaskForm):
-	submit = SubmitField('Post for review')
+	post_for_advice = SubmitField('Post for advice')
 	
 class CommentForm(FlaskForm):
 	comment = TextAreaField('Post a comment', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000})
@@ -99,4 +99,4 @@ class CommentForm(FlaskForm):
 class ReviewForm(FlaskForm):
 	review = TextAreaField('Write a review for ', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 6, "cols": 20})
 	score = SelectField('Rating: ', choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')])
-	submit = SubmitField('Submit')
+	submit_review = SubmitField('Submit')
