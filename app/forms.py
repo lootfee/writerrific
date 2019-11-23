@@ -77,7 +77,7 @@ class EditProjectForm(FlaskForm):
 class CreateChapterForm(FlaskForm):
 	chapter_number = IntegerField('Chapter Number', validators=[DataRequired()])
 	chapter_title = StringField('Chapter title:', validators=[DataRequired()])
-	submit = SubmitField('Submit')
+	submit_chapter = SubmitField('Submit')
 	
 class EditChapterForm(FlaskForm):
 	chapter_id = HiddenField('Chapter id:', validators=[DataRequired()])
@@ -87,7 +87,7 @@ class EditChapterForm(FlaskForm):
 	save = SubmitField('Save')
 
 class PublishForm(FlaskForm):
-	publish = SubmitField('Publish')
+	publish_project = SubmitField('Publish Project')
 	
 class CommentReviewForm(FlaskForm):
 	post_for_advice = SubmitField('Post for advice')

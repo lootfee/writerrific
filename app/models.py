@@ -2,6 +2,8 @@ from datetime import datetime
 from app import db, login, app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from datetime import datetime
+from math import sqrt
 
 	
 followers = db.Table('followers',
@@ -135,6 +137,9 @@ class Project(db.Model):
 		backref=db.backref('book', lazy='dynamic'), lazy='dynamic'
 	)
 	
+	#def last_date_submitted(self):
+	#	return self.chapters.order_by(Chapter.date_submitted.desc()).first().date_submitted
+	
 	def is_purchased(self, user):
 		return self.books.filter(
 			library.c.user_id == user.id).count() > 0
@@ -185,6 +190,48 @@ class Project(db.Model):
 					self.upvoters.remove(user)
 					self.downvoters.append(user)
 	
+	def total_score(self):
+		total_score = 0
+		for p in self.ratings:
+			total_score += p.score
+		return total_score
+		
+	def total_votes(self):
+		return self.ratings.count()
+		
+	
+	def _confidence(self, ups, downs):
+		n = ups + downs
+
+		if n == 0:
+			return 0
+
+		z = 1.281551565545
+		p = float(ups) / n
+
+		left = p + 1/(2*n)*z*z
+		right = z*sqrt(p*(1-p)/n + z*z/(4*n*n))
+		under = 1+1/n*z*z
+
+		return round((left - right) / under, 2)
+
+
+
+	def confidence(self):
+		n = self.total_votes() * 10
+		total_score = self.total_score()
+		
+		if n == 0:
+			return 0
+			
+		z = 1.281551565545
+		p = float(total_score) / n
+
+		left = p + 1/(2*n)*z*z
+		right = z*sqrt(p*(1-p)/n + z*z/(4*n*n))
+		under = 1+1/n*z*z
+
+		return round((left - right) / under, 2)
 	
 	def __repr__(self):
 		return '<Project {} >'.format(self.title)
@@ -204,7 +251,7 @@ class Chapter(db.Model):
 	project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
 	author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	date_submitted = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-		
+			
 	def __repr__(self):
 		return '<Chapter {}>'.format(self.id)
 		

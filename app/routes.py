@@ -41,6 +41,7 @@ def advice():
 		if for_advice_projects.has_next else None
 	prev_url = url_for('index', page=projects.prev_num) \
 		if for_advice_projects.has_prev else None
+	#last_date_submitted = for_advice_projects.chapters.order_by(Chapter.date_submitted.desc()).first().date_submitted
 	return render_template('index.html', title='Give advice', for_advice_projects=for_advice_projects.items, next_url=next_url, prev_url=prev_url)
 	
 @app.route('/login', methods=['GET', 'POST'])
@@ -218,7 +219,7 @@ def project(id, title):
 	project = Project.query.filter_by(id=id).first()
 	chapters = Chapter.query.filter_by(project_id=project.id).all()
 	form = CreateChapterForm()
-	if form.validate_on_submit():
+	if form.submit_chapter.data and form.validate_on_submit():
 		chapter = Chapter(chapter_no=form.chapter_number.data, chapter_title=form.chapter_title.data, project_id=project.id, author_id=current_user.id)
 		db.session.add(chapter)
 		db.session.commit()
@@ -227,17 +228,17 @@ def project(id, title):
 		if c.chapter_body is not None:
 			c.body = markdown2.markdown(c.chapter_body)
 	form1 = CommentReviewForm()
-	if form1.validate_on_submit():
+	if form1.post_for_advice.data and form1.validate_on_submit():
 		project.date_seek_review = datetime.utcnow()
 		db.session.commit()
 		return redirect(url_for('project', id=project.id, title=project.title))
 	form2 = PublishForm()
-	if form2.validate_on_submit():
+	if form2.publish_project.data and form2.validate_on_submit():
 		project.date_published = datetime.utcnow()
 		db.session.commit()
 		return redirect(url_for('project', id=project.id, title=project.title))
 	form3 = ReviewForm()
-	if form3.validate_on_submit():
+	if form3.submit_review.data and form3.validate_on_submit():
 		ratings = Rating(review=form3.review.data, score=form3.score.data, project_id=project.id, user_id=current_user.id)
 		db.session.add(ratings)
 		db.session.commit()
@@ -249,6 +250,7 @@ def project(id, title):
 def project_synopsis(id, title):
 	project = Project.query.filter_by(id=id).first()
 	user = User.query.filter_by(username=current_user.username).first()
+	last_date_submitted = project.chapters.order_by(Chapter.date_submitted.desc()).first().date_submitted
 	form = CommentForm()
 	if form.validate_on_submit():
 		comment = Comment(body=form.comment.data, user_id=user.id, project_id=project.id)
@@ -257,7 +259,7 @@ def project_synopsis(id, title):
 		return redirect(url_for('project_synopsis', id=project.id, title=project.title))
 	comments = Comment.query.filter_by(project_id=project.id).order_by(Comment.timestamp.desc()).all()
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
-	return render_template('project_synopsis.html', project=project, user=user, form=form, comments=comments, reviews=reviews)
+	return render_template('project_synopsis.html', project=project, user=user, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
 	
 @app.route('/upvote/<int:id>', methods=['GET', 'POST'])
 @login_required

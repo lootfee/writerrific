@@ -120,16 +120,8 @@
 		<div class="modal-content">
 		  <div class="modal-body">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<form action method="post" class="form" role="form">
-				{{ form3.hidden_tag() }}
-				{{ form3.review.label (class_='control-label')}} <strong >{{project.title}}</strong>
-				{{ form3.review (class_='form-control')}}
-				<br>
-				<div>
-				<span class="col-md-8"><strong>Give a score for {{ project.title }} (1 is bad, 10 is very good.)</strong></span><span class="col-md-2">{{ form3.score (class_='form-control')}}</span>
-				</div>
-				{{ form3.submit (class_='btn btn-default')}}
-			</form>
+			{{ wtf.quick_form(form3)}}
+			
 		  </div>
 		</div>
 	  </div>

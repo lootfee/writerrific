@@ -36,15 +36,26 @@
 						{% if project.ratings %}
 						<span>
 							<div>
-								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Book score: {% for p in project.ratings %}{{ p.score }}{% endfor %}</span>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Book score: {{project.total_score() / project.total_votes()}}</span>
 							</div>
 						</span>
 						<span>
 							<div>
-								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Author score: {{ project.ratings.score }}</span>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Author score: {{ project.confidence()}}</span>
 							</div>
 						</span>
 						{% endif %}
+						{% else %}
+						<span>
+							<div>
+								<span>Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span>
+							</div>
+						</span>
+						<!--span>
+							<div>
+								<span style="float:right;">Last updated: </span>
+							</div>
+						</span-->
 						{% endif %}
 					</span>
 				</div>
