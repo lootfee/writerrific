@@ -38,8 +38,8 @@
 					</span>
 					<span class="col-md-6 text-center">
 						{% if project.date_published %}
-						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Book score: {% for p in project.ratings %}{{ p.score }}{% endfor %}</span>
-						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Author score: {{ project.ratings.score }}</span>
+						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Book score: {{project.project_score()}}</span>
+						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_confidence()}}</span>
 						{% endif %}
 					</span>
 					<span class="col-md-3" >

@@ -76,7 +76,7 @@
 				<div class="col-md-2 col-sm-1 col-xs-1" id="comment_btn">
 					{% if project.author == current_user %}
 					{% if project.date_published is none and project.date_seek_review is none %}
-					<span><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for review</a></span>
+					<span><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for advice</a></span>
 					{% elif project.date_published is none and project.date_seek_review %}
 					<span><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></span>
 					{% endif %}
