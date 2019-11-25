@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover" style=" border-collapse: separate !important;border-radius: 1em;overflow: hidden; margin-bottom:5px;">
+<table class="table table-bordered table-hover" style=" border-collapse: separate !important;border-radius: 1em;overflow: hidden; margin-bottom:5px; border-color:black;">
 	<tr>
 		<td>
 			<div class="row">
@@ -7,9 +7,9 @@
 						<span>
 							<div>
 							{% if not current_user.is_anonymous and project.upvoted(current_user) %}
-							<span class="btn btn-primary upvote" data-postid="{{project.id}}" name="upvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"style="color:white;"></span></span>
+							<span class="btn btn-primary upvote" data-postid="{{project.id}}" name="upvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none; border-color:#858cec;"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"style="color:white;"></span></span>
 							{% else %}
-							<span class="btn btn-default upvote" data-postid="{{project.id}}" name="upvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></span>
+							<span class="btn btn-default upvote" data-postid="{{project.id}}" name="upvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;border-color:#858cec;"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></span>
 							{% endif %}
 							<span style="font-size: 11px;font-style:italic;color:blue;">{% if project.upvotes %}{{ project.upvoters.count() }}{% else %}0 {% endif %} </span>		
 							</div>
@@ -17,9 +17,9 @@
 						<span>
 							<div>
 							{% if not current_user.is_anonymous and project.downvoted(current_user) %}
-							<span class="btn btn-danger downvote" name="downvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color:white;"></span></span>
+							<span class="btn btn-danger downvote" name="downvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;border-color:#e84949;"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color:white;"></span></span>
 							{% else %}
-							<span class="btn btn-default downvote" name="downvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></span>
+							<span class="btn btn-default downvote" name="downvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;border-color:#e84949;"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></span>
 							{% endif %}
 							<span style="font-size: 11px;font-style:italic;color:red;">{% if project.downvotes %}{{ project.downvoters.count() }}{% else %}0{% endif %}</span>
 							</div>
@@ -27,8 +27,8 @@
 					</span>
 					<span class="col-md-8" >
 						<div class="text-center">
-						<a href="{{ url_for('project_synopsis', id=project.id, title=project.title)}}"><p>{{ project.title }}</p></a>
-						<a href="{{ url_for('user', username=project.author.username) }}"><p>By: {{ project.author.username }}</p></a>
+						<a href="{{ url_for('project_synopsis', id=project.id, title=project.title)}}" style="color:#0066ff; font-weight:bold;"><p>{{ project.title }}</p></a>
+						<a href="{{ url_for('user', username=project.author.username) }}" style="color:#0066ff;"><p>By: {{ project.author.username }}</p></a>
 						</div>
 					</span>
 					<span class="col-md-2">
@@ -36,12 +36,12 @@
 						{% if project.ratings %}
 						<span>
 							<div>
-								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Book score: {{project.total_score() / project.total_votes()}}</span>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Book score: {{project.project_score()}}</span>
 							</div>
 						</span>
 						<span>
 							<div>
-								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;">Author score: {{ project.confidence()}}</span>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_confidence()}}</span>
 							</div>
 						</span>
 						{% endif %}

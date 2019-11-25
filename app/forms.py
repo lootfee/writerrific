@@ -63,8 +63,8 @@ class ResetPasswordForm(FlaskForm):
 	
 class CreateProjectForm(FlaskForm):
 	title = StringField('Title', validators=[DataRequired()])
-	genre = StringField('Genre', validators=[DataRequired()])
-	synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=50000)], render_kw={'maxlength': 50000})
+	genre = StringField('Genre', validators=[DataRequired()], render_kw={'placeholder': 'Separate each genre with a comma.'})
+	synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=50000)], render_kw={'maxlength': 50000 })
 	submit = SubmitField('Submit')
 	
 class EditProjectForm(FlaskForm):

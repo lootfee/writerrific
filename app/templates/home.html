@@ -2,8 +2,43 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<div class="container" style="margin-top: 70px;">
-	<h2>Create your book, seek and give advice, and publish your work.</h2>
+<div class="container">
+	<div class="page-header" id="home-header">
+	  <h1>Writerrific <small id="header-small">is a new written content platform and host for writers to share and publish their work.</small></h1>
+	</div>
+
+	<div class="jumbotron">
+	  <p>Amateur authors can publish and seek advice for their books. It can also be used by aspiring journalists and bloggers to share their content and even for scientists to publish their journals.</p>
+	  <p>Contents are created thru markdown which makes them easily customizable and you can add images and even vidoes.</p>
+	  <p> You an access a markdown cheatsheet <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.</p>
+	  <p><a class="btn btn-primary btn-lg" id="join-us-btn" href="{{url_for('register')}}">Join us</a> and be part of our pioneer authors and readers.</p>
+	</div>
+		
+	
     
 </div>
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<style>
+	#home-header {
+		background-color: #2D132c;
+		color: #fff;
+		padding: 18px;
+		border-radius: 6px;
+		font-family: serif;
+	}
+	#header-small {
+		color: #fff;
+	}
+	#join-us-btn {
+		color: #fff;
+		background-color: #EE4540;
+		border-color: #EE4540;
+	}
+	#join-us-btn:hover {
+		background-color: #DA2D2D;
+	}
+</style>
 {% endblock %}

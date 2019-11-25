@@ -95,6 +95,33 @@ class User(UserMixin, db.Model):
 			return
 		return User.query.get(id)
 		
+	def projects_total_score(self):
+		total_score = 0
+		for s in self.project:
+			for r in s.ratings:
+				total_score += r.score
+		return total_score
+		
+	def author_confidence(self):
+		n = self.project.count()
+		total_score = self.projects_total_score()
+		
+		if n == 0:
+			return 0
+			
+		elif total_score == 0:
+			return 0
+		
+		else:		
+			z = 1.281551565545
+			p = float(total_score) / n
+
+			left = p + 1/(2*n)*z*z
+			right = (p*(1-p)/n + z*z/(4*n*n))#z*sqrt
+			under = 1+1/n*z*z
+
+			return round((left - right) / under, 2)
+		
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -198,7 +225,13 @@ class Project(db.Model):
 		
 	def total_votes(self):
 		return self.ratings.count()
+	
+	def project_score(self):
+		n = self.total_votes()
+		if n == 0:
+			return 0
 		
+		return self.total_score() / n
 	
 	def _confidence(self, ups, downs):
 		n = ups + downs
