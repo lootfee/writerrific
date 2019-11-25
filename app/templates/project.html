@@ -19,14 +19,14 @@
 				{% endif %}
 				{% if project.author == current_user %}
 				{% if project.date_published is none and project.date_seek_review is none %}
-				<li>{{wtf.quick_form(form1)}}</li>
+				<li><a href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for review</a></li>
 				{% elif project.date_published is none and project.date_seek_review %}
 				<li><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></li>
 				{% endif %}
 				{% endif %}
 				{% if project.author == current_user %}
 				{% if project.date_published is none %}
-				<li >{{wtf.quick_form(form2)}}</li>
+				<li ><a href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></li>
 				{% else %}
 				<li><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></li>
 				{% endif %}
@@ -147,6 +147,36 @@
 	  </div>
 	</div>
 	{% endif %}
+	{% if project.author == current_user %}
+	{% if project.date_published is none and project.date_seek_review is none %}
+	<div class="modal fade" id="post_for_review_modal" tabindex="-1" role="dialog" aria-labelledby="post_for_review_modal_Label">
+	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
+		<div class="modal-content">
+		  <div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{wtf.quick_form(form1)}}
+			
+		  </div>
+		</div>
+	  </div>
+	</div>
+	{% endif %}
+	{% endif %}
+	{% if project.author == current_user %}
+	{% if project.date_published is none %}
+	<div class="modal fade" id="publish_modal" tabindex="-1" role="dialog" aria-labelledby="publish_modal_Label">
+	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
+		<div class="modal-content">
+		  <div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{wtf.quick_form(form2)}}
+			
+		  </div>
+		</div>
+	  </div>
+	</div>
+	{% endif %}
+	{% endif %}
 </div>	
 	
 	
@@ -158,7 +188,7 @@
 	.modal-dialog,
 	.modal-content {
 		/* 80% of window height */
-		height: 80%;
+		height: 90%;
 		width: 60%;
 		margin: 0 auto;
 		margin-top: 10%;
