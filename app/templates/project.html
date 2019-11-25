@@ -76,7 +76,7 @@
 				<div class="col-md-2 col-sm-1 col-xs-1" id="comment_btn">
 					{% if project.author == current_user %}
 					{% if project.date_published is none and project.date_seek_review is none %}
-					{{wtf.quick_form(form1)}}
+					<span><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for review</a></span>
 					{% elif project.date_published is none and project.date_seek_review %}
 					<span><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></span>
 					{% endif %}
@@ -88,7 +88,7 @@
 				<div class="col-md-2 col-sm-1 col-xs-1" id="publish_btn">
 					{% if project.author == current_user %}
 					{% if project.date_published is none %}
-					{{wtf.quick_form(form2)}}
+					<a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a>
 					{% endif %}
 					{% endif %}
 				</div>
@@ -123,7 +123,7 @@
 	{% if form %}
 	<div class="modal fade" id="create_chapter_modal" tabindex="-1" role="dialog" aria-labelledby="create_chapter_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 50%;width: 80%;">
-		<div class="modal-content">
+		<div class="modal-content medium-modal">
 		  <div class="modal-body">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			{{ wtf.quick_form(form) }}
@@ -137,7 +137,7 @@
 	{% if project.date_published %}
 	<div class="modal fade" id="review_modal" tabindex="-1" role="dialog" aria-labelledby="review_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
-		<div class="modal-content">
+		<div class="modal-content medium-modal">
 		  <div class="modal-body">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			{{ wtf.quick_form(form3)}}
@@ -151,11 +151,11 @@
 	{% if project.date_published is none and project.date_seek_review is none %}
 	<div class="modal fade" id="post_for_review_modal" tabindex="-1" role="dialog" aria-labelledby="post_for_review_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
-		<div class="modal-content">
+		<div class="modal-content small-modal">
 		  <div class="modal-body">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h3>Your project will be posted on the advice page so other users give comment on how you can improve.</h3>
 			{{wtf.quick_form(form1)}}
-			
 		  </div>
 		</div>
 	  </div>
@@ -166,11 +166,11 @@
 	{% if project.date_published is none %}
 	<div class="modal fade" id="publish_modal" tabindex="-1" role="dialog" aria-labelledby="publish_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
-		<div class="modal-content">
+		<div class="modal-content small-modal">
 		  <div class="modal-body">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h3>Please know that once published, your project cannot be edited.</h3>
 			{{wtf.quick_form(form2)}}
-			
 		  </div>
 		</div>
 	  </div>
@@ -186,12 +186,30 @@
 {{ super() }}
 <style>
 	.modal-dialog,
-	.modal-content {
+	.medium-modal {
 		/* 80% of window height */
 		height: 90%;
 		width: 60%;
 		margin: 0 auto;
 		margin-top: 10%;
+	}
+	
+	.modal-dialog,
+	.small-modal {
+		/* 80% of window height */
+		height: 60%;
+		width: 60%;
+		margin: 0 auto;
+		margin-top: 10%;
+	}
+	
+	#publish_project {
+		color:#0884e6;
+		font-weight: bold;
+	}
+	#post_for_advice {
+	color:#0884e6;
+	font-weight: bold;
 	}
 
 	.modal-body {

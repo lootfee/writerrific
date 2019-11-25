@@ -98,5 +98,5 @@ class CommentForm(FlaskForm):
 	
 class ReviewForm(FlaskForm):
 	review = TextAreaField('Write a review for ', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 6, "cols": 20})
-	score = SelectField('Rating: ', choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')])
+	score = SelectField('Rating: (1 for Bad, 10 for Very Good)', choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')])
 	submit_review = SubmitField('Submit')
