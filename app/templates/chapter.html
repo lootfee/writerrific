@@ -25,7 +25,11 @@
 			</div>
 		</div>
 		<div class="row" >
-			<textarea class="col-md-12 flask-pagedown-input" cols="15" rows="20" id="flask-pagedown-edit_body" name="edit_body" required>{{chapter.chapter_body}}</textarea>
+			<div class="col-md-1 col-sm-1 col-xs-1"></div>
+			<div class="col-md-11 col-sm-11 col-xs-11">
+				<textarea class="flask-pagedown-input" cols="100" rows="18" id="flask-pagedown-edit_body" name="edit_body" required>{{chapter.chapter_body}}</textarea>
+			</div>
+			<div class="col-md-1 col-sm-1 col-xs-1"></div>
 		</div>
 		<div class="col-md-12">
 		<br>
@@ -44,6 +48,12 @@ img {
 	margin-left: auto;
 	margin-right: auto;
 }
+@media (max-width: 960px) {
+	  #flask-pagedown-edit_body {
+		width: 300px;
+		height: 150px;
+	  }
+	}
 </style>
 {% endblock %}
 
