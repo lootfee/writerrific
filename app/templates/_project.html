@@ -3,7 +3,7 @@
 		<td>
 			<div class="row">
 				<div class="col-md-12">
-					<span class="col-md-2">
+					<span class="col-md-2 col-sm-2 col-xs-2">
 						<span>
 							<div>
 							{% if not current_user.is_anonymous and project.upvoted(current_user) %}
@@ -25,13 +25,14 @@
 							</div>
 						</span>
 					</span>
-					<span class="col-md-8" >
+					<span class="col-md-8 col-sm-8 col-xs-6" >
 						<div class="text-center">
 						<a href="{{ url_for('project_synopsis', id=project.id, title=project.title)}}" style="color:#0066ff; font-weight:bold;"><p>{{ project.title }}</p></a>
 						<a href="{{ url_for('user', username=project.author.username) }}" style="color:#0066ff;"><p>By: {{ project.author.username }}</p></a>
 						</div>
+						
 					</span>
-					<span class="col-md-2">
+					<span class="col-md-2 col-sm-2 col-xs-2">
 						{% if project.date_published %}
 						{% if project.ratings %}
 						<span>
@@ -39,16 +40,11 @@
 								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Book score: {{project.project_score()}}</span>
 							</div>
 						</span>
+						{% endif %}
+						{% endif %}
 						<span>
 							<div>
 								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_confidence()}}</span>
-							</div>
-						</span>
-						{% endif %}
-						{% else %}
-						<span>
-							<div>
-								<span>Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span>
 							</div>
 						</span>
 						<!--span>
@@ -56,9 +52,12 @@
 								<span style="float:right;">Last updated: </span>
 							</div>
 						</span-->
-						{% endif %}
+						
 					</span>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></div>
 			</div>
 		</td>
 	</tr>

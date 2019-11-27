@@ -20,31 +20,37 @@
 				</tr>
 				<tr>
 					<td>
-					<span class="col-md-3">
+					<span class="col-md-3 col-sm-2 col-xs-2">
+						<div>
 							{% if project.upvoted(current_user) %}
 							<span class="btn btn-primary upvote" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('upvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"style="color:white;"></span></a></span>
 							{% else %}
 							<span class="btn btn-default upvote" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('upvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a></span>
 							{% endif %}
 							<span style="font-size: 11px;font-style:italic;color:blue;"> {% if project.upvotes %}{{ project.upvoters.count()}} {% else %}0 {% endif %} </span>
-						
+						</div>
+						<div>
 							{% if project.downvoted(current_user) %}
 							<span class="btn btn-danger" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('downvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color:white;"></span></a></span>
 							{% else %}
 							<span class="btn btn-default" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('downvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a></span>
 							{% endif %}
 							<span style="font-size: 11px;font-style:italic;color:red;"> {% if project.downvotes %}{{ project.downvoters.count() }} {% else %}0 {% endif %}</span>
-						
+						</div>
 					</span>
-					<span class="col-md-6 text-center">
+					<span class="col-md-6 col-sm-4 col-xs-4 text-center">
 						{% if project.date_published %}
-						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Book score: {{project.project_score()}}</span>
-						<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_confidence()}}</span>
+						<div>
+							<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Book score: {{project.project_score()}}</span>
+						</div>
+						<div>
+							<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_confidence()}}</span>
+						</div>
 						{% endif %}
 					</span>
-					<span class="col-md-3" >
+					<span class="col-md-3 col-sm-3 col-xs-3">
 						{% if project.date_published %}
-						<div style="float:right;">
+						<div class="col-md-10 col-sm-9 col-xs-9">
 						{% if project.is_purchased(current_user)%}
 						<a href="{{ url_for('project', id=project.id, title=project.title) }}"><input class="btn btn-primary" value="View in library"></a>
 						{% elif project.author == current_user %}
@@ -102,6 +108,40 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block style %}
+{{super()}}
+<!--style>
+@media (max-width: 960px) {
+	  #proj_sidenav     { display: none; }
+	  #comment_btn { display: none; }
+	  #publish_btn { display: none; }
+	  #publish_project {
+		color:#0884e6;
+		font-weight: bold;
+	  }
+	  #post_for_advice {
+		color:#0884e6;
+		font-weight: bold;
+	  }
+	  #proj_sidenav_mobile { 
+		display: inline-block;
+		margin-top: 34px;
+		position: fixed;
+		z-index: 99;
+		bottom: 0;
+		left: 0;
+		}
+		#chapter_edit_mobile {
+			display: inline-block;
+		}
+		.main_body {
+			margin-left: 0;
+		}
+	}
+
+</style-->
 {% endblock %}
 
 {% block scripts %}
