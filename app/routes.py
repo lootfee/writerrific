@@ -24,7 +24,7 @@ def home():
 @app.route('/explore', methods=['GET', 'POST'])
 def index():
 	page = request.args.get('page', 1, type=int)
-	projects = Project.query.filter(Project.date_published.isnot(None)).paginate(
+	projects = Project.query.order_by(Project.date_published.desc()).filter(Project.date_published.isnot(None)).paginate(
 		page, app.config['POSTS_PER_PAGE'], False)
 	next_url = url_for('index', page=projects.next_num) \
 		if projects.has_next else None
@@ -35,7 +35,7 @@ def index():
 @app.route('/advice', methods=['GET', 'POST'])
 def advice():
 	page = request.args.get('page', 1, type=int)
-	for_advice_projects = Project.query.filter(Project.date_seek_review.isnot(None)).filter_by(date_published=None).paginate(
+	for_advice_projects = Project.query.order_by(Project.date_published.desc()).filter(Project.date_seek_review.isnot(None)).filter_by(date_published=None).paginate(
 		page, app.config['POSTS_PER_PAGE'], False)
 	next_url = url_for('index', page=projects.next_num) \
 		if for_advice_projects.has_next else None

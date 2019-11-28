@@ -10,7 +10,7 @@
 					<td>
 						<h1 class="text-center">{{ project.title }}</h1>
 						<a href="{{url_for('user', username=project.author.username)}}"><div class="text-center">Author: {{ project.author.username }}</div></a>
-						<div><span class="text-center">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span><span style="float:right;">Last updated: {{ moment(last_date_submitted).calendar() }}</span></div>
+						<div><span class="text-center">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span><span style="float:right;">{% if last_date_submitted%}Last updated: {{ moment(last_date_submitted).calendar() }}{% endif%}</span></div>
 						
 					</td>
 					
