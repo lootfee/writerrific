@@ -250,7 +250,9 @@ def project(id, title):
 def project_synopsis(id, title):
 	project = Project.query.filter_by(id=id).first()
 	user = User.query.filter_by(username=current_user.username).first()
-	last_date_submitted = project.chapters.order_by(Chapter.date_submitted.desc()).first().date_submitted
+	last_date_submitted = ''
+	if project.chapters is not None:
+		last_date_submitted = project.chapters.order_by(Chapter.date_submitted.desc()).first().date_submitted
 	form = CommentForm()
 	if form.validate_on_submit():
 		comment = Comment(body=form.comment.data, user_id=user.id, project_id=project.id)
