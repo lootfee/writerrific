@@ -6,4 +6,4 @@ class Config(object):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	POSTS_PER_PAGE = 20
-	#mysql+pymysql://writerrific:writerrific1123@localhost:3306/writerrific'
+	
