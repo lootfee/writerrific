@@ -67,31 +67,33 @@
 					{% endif %}
 					{% endif %}
 				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12" id="comment_btn">
+					{% if project.author == current_user %}
+					{% if project.date_published is none and project.date_seek_review is none %}
+					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for advice</a></p>
+					{% elif project.date_published is none and project.date_seek_review %}
+					<p><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></p>
+					{% endif %}
+					{% endif %}
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12" id="publish_btn">
+					{% if project.author == current_user %}
+					{% if project.date_published is none %}
+					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></p>
+					{% endif %}
+					{% endif %}
+				</div>
 				<div class="row" style="margin-bottom:20px;"></div>
 				
 			</div>
 		</div>
 		<div class="col-md-10 col-sm-12 col-xs-12 main_body" style="position:absolute; margin-bottom: 50px;">
 			<div class="row">
-				<div class="col-md-2 col-sm-1 col-xs-1" id="comment_btn">
-					{% if project.author == current_user %}
-					{% if project.date_published is none and project.date_seek_review is none %}
-					<span><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for advice</a></span>
-					{% elif project.date_published is none and project.date_seek_review %}
-					<span><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></span>
-					{% endif %}
-					{% endif %}
-				</div>
+				
 				<div class="col-md-8 col-sm-8 col-xs-8 text-center">
 					<h1 style="font-family: serif;font-weight: bold;">{{ project.title }}</h1>
 				</div>
-				<div class="col-md-2 col-sm-1 col-xs-1" id="publish_btn">
-					{% if project.author == current_user %}
-					{% if project.date_published is none %}
-					<a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a>
-					{% endif %}
-					{% endif %}
-				</div>
+				
 			</div>
 			<div class="row" style="font-family: serif;font-size: 18px;">
 				<div class="col-md-1"></div>
