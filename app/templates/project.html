@@ -79,7 +79,7 @@
 				<div class="col-md-12 col-sm-12 col-xs-12" id="publish_btn">
 					{% if project.author == current_user %}
 					{% if project.date_published is none %}
-					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></p>
+					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a>
 					{% endif %}
 					{% endif %}
 				</div>
@@ -89,11 +89,11 @@
 		</div>
 		<div class="col-md-10 col-sm-12 col-xs-12 main_body" style="position:absolute; margin-bottom: 50px;">
 			<div class="row">
-				
+				<div class="col-md-2 col-sm-2 col-xs-2"></div>
 				<div class="col-md-8 col-sm-8 col-xs-8 text-center">
 					<h1 style="font-family: serif;font-weight: bold;">{{ project.title }}</h1>
 				</div>
-				
+				<div class="col-md-2 col-sm-2 col-xs-2"></div>
 			</div>
 			<div class="row" style="font-family: serif;font-size: 18px;">
 				<div class="col-md-1"></div>
