@@ -44,7 +44,7 @@
 						{% endif %}
 						<span>
 							<div>
-								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_confidence()}}</span>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_score()}}</span>
 							</div>
 						</span>
 						<!--span>
@@ -57,7 +57,13 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></div>
+				<div class="col-md-12">
+					<span class="col-md-10">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span>
+					{% if project.date_published %}
+					<span class="col-md-2">Published: {{ moment(project.date_published).format('l')}}</span>
+					{% endif %}
+				</div>
+				
 			</div>
 		</td>
 	</tr>

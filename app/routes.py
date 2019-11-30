@@ -217,7 +217,7 @@ def reset_password(token):
 @login_required
 def project(id, title):
 	project = Project.query.filter_by(id=id).first()
-	chapters = Chapter.query.filter_by(project_id=project.id).all()
+	chapters = Chapter.query.filter_by(project_id=project.id).order_by(Chapter.chapter_no.asc()).all()
 	form = CreateChapterForm()
 	if form.submit_chapter.data and form.validate_on_submit():
 		chapter = Chapter(chapter_no=form.chapter_number.data, chapter_title=form.chapter_title.data, project_id=project.id, author_id=current_user.id)

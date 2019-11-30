@@ -98,12 +98,22 @@ class User(UserMixin, db.Model):
 	def projects_total_score(self):
 		total_score = 0
 		for s in self.project:
-			for r in s.ratings:
-				total_score += r.score
+			total_score += s.project_score()
 		return total_score
 		
+	def author_score(self):
+		n = 0
+		for s in self.project:
+			if s.ratings is not None:
+				n += 1
+		#n = self.project.count()
+		if n == 0:
+			return 0
+		
+		return round(self.projects_total_score() / n, 2)
+		
 	def author_confidence(self):
-		n = self.project.count()
+		n = self.project.count() * 10
 		total_score = self.projects_total_score()
 		
 		if n == 0:
@@ -117,7 +127,7 @@ class User(UserMixin, db.Model):
 			p = float(total_score) / n
 
 			left = p + 1/(2*n)*z*z
-			right = (p*(1-p)/n + z*z/(4*n*n))#z*sqrt
+			right = z*sqrt(p*(1-p)/n + z*z/(4*n*n))
 			under = 1+1/n*z*z
 
 			return round((left - right) / under, 2)
@@ -231,8 +241,9 @@ class Project(db.Model):
 		if n == 0:
 			return 0
 		
-		return self.total_score() / n
+		return round(self.total_score() / n, 2)
 	
+	#for guide only---------------------------------
 	def _confidence(self, ups, downs):
 		n = ups + downs
 
@@ -246,8 +257,8 @@ class Project(db.Model):
 		right = z*sqrt(p*(1-p)/n + z*z/(4*n*n))
 		under = 1+1/n*z*z
 
-		return round((left - right) / under, 2)
-
+		return round((left - right) / under, 8)
+	#-------------------------------------------------
 
 
 	def confidence(self):
