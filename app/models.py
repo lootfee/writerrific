@@ -55,6 +55,9 @@ class User(UserMixin, db.Model):
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
+		
+	def is_superuser(self):
+		return self.id == 1
 
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -145,6 +148,7 @@ class Project(db.Model):
 	#ratings = db.relationship('Rating', backref='book', lazy='dynamic')
 	date_seek_review = db.Column(db.DateTime, index=True)
 	date_published = db.Column(db.DateTime, index=True)
+	date_quarantined = db.Column(db.DateTime)
 	
 	comments = db.relationship('Comment', backref=db.backref('project', lazy=True), lazy='dynamic')
 	ratings = db.relationship('Rating', backref=db.backref('project', lazy=True), lazy='dynamic')

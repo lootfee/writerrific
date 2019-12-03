@@ -24,7 +24,7 @@ def home():
 @app.route('/explore', methods=['GET', 'POST'])
 def index():
 	page = request.args.get('page', 1, type=int)
-	projects = Project.query.order_by(Project.date_published.desc()).filter(Project.date_published.isnot(None)).paginate(
+	projects = Project.query.order_by(Project.date_published.desc()).filter(Project.date_published.isnot(None)).filter_by(date_quarantined=None).paginate(
 		page, app.config['POSTS_PER_PAGE'], False)
 	next_url = url_for('index', page=projects.next_num) \
 		if projects.has_next else None
@@ -35,7 +35,7 @@ def index():
 @app.route('/advice', methods=['GET', 'POST'])
 def advice():
 	page = request.args.get('page', 1, type=int)
-	for_advice_projects = Project.query.order_by(Project.date_published.desc()).filter(Project.date_seek_review.isnot(None)).filter_by(date_published=None).paginate(
+	for_advice_projects = Project.query.order_by(Project.date_published.desc()).filter(Project.date_seek_review.isnot(None)).filter_by(date_published=None, date_quarantined=None).paginate(
 		page, app.config['POSTS_PER_PAGE'], False)
 	next_url = url_for('index', page=projects.next_num) \
 		if for_advice_projects.has_next else None
@@ -81,13 +81,13 @@ def register():
 @login_required
 def user(username):
 	user = User.query.filter_by(username=username).first_or_404()
-	portfolio = Project.query.filter_by(user_id=user.id).all()
+	portfolio = Project.query.filter_by(user_id=user.id, date_quarantined=None).all()
 	for p in portfolio:
 		pg_list = []
 		for pg in p.genre:
 			pg_list.append(pg.name)
 		p.pg_name = ','.join(pg_list)
-	library = user.books.all()
+	library = user.books.filter_by(date_quarantined=None).all()
 	form = CreateProjectForm()
 	form2 = EditProjectForm()
 	if form.submit.data:
@@ -262,6 +262,14 @@ def project_synopsis(id, title):
 	comments = Comment.query.filter_by(project_id=project.id).order_by(Comment.timestamp.desc()).all()
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
 	return render_template('project_synopsis.html', project=project, user=user, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
+	
+@app.route('/quarantine_project/<id>', methods=['GET', 'POST'])
+@login_required
+def quarantine_project(id):
+	project = Project.query.filter_by(id=id).first()
+	project.date_quarantined = datetime.utcnow()
+	db.session.commit()
+	return redirect(url_for('index'))
 	
 @app.route('/upvote/<int:id>', methods=['GET', 'POST'])
 @login_required
