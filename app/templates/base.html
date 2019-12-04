@@ -87,7 +87,11 @@
 	{% else %}
 	<meta name="description" content="Writers and readers superhighway">
 	{% endif %}
+	{% if keywords %}
+	<meta name="keywords" content="{{ keywords }}">
+	{% else %}
 	<meta name="keywords" content="write book ebook writer reader books terrific written create content blogs novel journal journalism">
+	{% endif %}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	{{ super() }}
 	<link rel="shortcut icon" href="/static/logo.jpg">

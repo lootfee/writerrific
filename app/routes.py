@@ -241,7 +241,11 @@ def project(id, title):
 		db.session.add(ratings)
 		db.session.commit()
 		return redirect(url_for('project', id=project.id, title=project.title))
-	return render_template('project.html', title=project.title, description=project.synopsis, project=project, form=form, form1=form1, form2=form2, form3=form3, chapters=chapters)
+	genre = []
+	for p in project.genre:
+		genre.append(p.name)
+	keywords = (', '.join(genre))
+	return render_template('project.html', title=project.title, keywords=keywords, description=project.synopsis, project=project, form=form, form1=form1, form2=form2, form3=form3, chapters=chapters)
 	
 @app.route('/project_synopsis/<id>/<title>', methods=['GET', 'POST'])
 def project_synopsis(id, title):
@@ -256,9 +260,13 @@ def project_synopsis(id, title):
 		db.session.add(comment)
 		db.session.commit()
 		return redirect(url_for('project_synopsis', id=project.id, title=project.title))
+	genre = []
+	for p in project.genre:
+		genre.append(p.name)
+	keywords = (', '.join(genre))
 	comments = Comment.query.filter_by(project_id=project.id).order_by(Comment.timestamp.desc()).all()
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
-	return render_template('project_synopsis.html', title=project.title, description=project.synopsis, project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
+	return render_template('project_synopsis.html', title=project.title, description=project.synopsis, keywords=keywords, project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
 	
 @app.route('/quarantine_project/<id>', methods=['GET', 'POST'])
 @login_required
