@@ -80,13 +80,13 @@ def register():
 @app.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
 	user = User.query.filter_by(username=username).first_or_404()
-	portfolio = Project.query.filter_by(user_id=user.id, date_quarantined=None).all()
+	portfolio = Project.query.filter_by(user_id=user.id, date_quarantined=None).order_by(Project.date_published.desc()).all()
 	for p in portfolio:
 		pg_list = []
 		for pg in p.genre:
 			pg_list.append(pg.name)
 		p.pg_name = ','.join(pg_list)
-	library = user.books.filter_by(date_quarantined=None).all()
+	library = user.books.filter_by(date_quarantined=None).order_by(Project.date_published.desc()).all()
 	form = CreateProjectForm()
 	form2 = EditProjectForm()
 	if form.submit.data:
@@ -134,7 +134,7 @@ def user(username):
 			form2.edit_title.data = p.title
 			form2.edit_genre.data = p.genre
 			form2.edit_synopsis.data = p.synopsis'''
-	return render_template('user.html', user=user, title='User', form=form, form2=form2, portfolio=portfolio, library=library)
+	return render_template('user.html', user=user, title='User', description=user.about_me, form=form, form2=form2, portfolio=portfolio, library=library)
 	
 	
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -241,7 +241,7 @@ def project(id, title):
 		db.session.add(ratings)
 		db.session.commit()
 		return redirect(url_for('project', id=project.id, title=project.title))
-	return render_template('project.html', project=project, form=form, form1=form1, form2=form2, form3=form3, chapters=chapters)
+	return render_template('project.html', title=project.title, description=project.synopsis, project=project, form=form, form1=form1, form2=form2, form3=form3, chapters=chapters)
 	
 @app.route('/project_synopsis/<id>/<title>', methods=['GET', 'POST'])
 def project_synopsis(id, title):
@@ -258,7 +258,7 @@ def project_synopsis(id, title):
 		return redirect(url_for('project_synopsis', id=project.id, title=project.title))
 	comments = Comment.query.filter_by(project_id=project.id).order_by(Comment.timestamp.desc()).all()
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
-	return render_template('project_synopsis.html', project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
+	return render_template('project_synopsis.html', title=project.title, description=project.synopsis, project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
 	
 @app.route('/quarantine_project/<id>', methods=['GET', 'POST'])
 @login_required

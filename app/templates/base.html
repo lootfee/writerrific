@@ -2,7 +2,7 @@
 
 {% block title %}
 	{% if title %}
-	Writerrific - {{ title }}
+	{{ title }} - Writerrific
 	{% else %}
 	Writerrific
 	{% endif %}
@@ -82,7 +82,11 @@
 {% endblock %}
 
 {% block styles %}
+	{% if description %}
+	<meta name="description" content="{{ description }}">
+	{% else %}
 	<meta name="description" content="Writers and readers superhighway">
+	{% endif %}
 	<meta name="keywords" content="write book ebook writer reader books terrific written create content blogs novel journal journalism">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	{{ super() }}

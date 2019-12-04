@@ -31,9 +31,18 @@
 				{% if portfolio %}
 				{% for p in portfolio %}
 				{% if current_user.is_authenticated and user == current_user %}
-				<li><div><span><a href="{{ url_for('project', id=p.id, title=p.title) }}">{{ p.title }}</span></a><a href="#" data-toggle="modal" data-target="#project_edit_modal_{{ p.id }}"><span class="glyphicon glyphicon-pencil" title="edit project name" aria-hidden="true" style="float:right;"></span></a></div></li>
+				<li>
+					<a href="{{ url_for('project', id=p.id, title=p.title) }}" style="width:90%; display:inline-flex;">
+						<span> {{ p.title }} </span> 
+						<span style="margin-left:20px;">{% if p.date_published %} Published: {{ moment(p.date_published).format('L') }} {% endif %} &nbsp;</span>
+					</a>
+					
+					<a href="#" data-toggle="modal" data-target="#project_edit_modal_{{ p.id }}" style="display:inline-flex;">
+						<span class="glyphicon glyphicon-pencil" title="edit project name" aria-hidden="true" style="float:right;"></span>
+					</a>
+				</li>
 				{% elif p.date_published %}
-				<li><a href="{{ url_for('project_synopsis', id=p.id, title=p.title) }}">{{ p.title }}</a></li>
+				<li><a href="{{ url_for('project_synopsis', id=p.id, title=p.title) }}"><span> {{ p.title }} </span> <span style="float:right;">{% if p.date_published %} Published: {{ moment(p.date_published).format('L') }} {% endif %}</span></a></li>
 				{% else %}
 				<li role="presentation"><a href="#" data-toggle="modal" data-target="#project_modal_{{ p.id }}">{{ p.title }}</a></li>
 				{% endif %}
@@ -47,9 +56,9 @@
 				{% if library %}
 				{% for l in library %}
 				{% if current_user.is_authenticated and user == current_user %}
-				<li><a href="{{ url_for('project', id=l.id, title=l.title) }}">{{ l.title }}</a></li>
+				<li><a href="{{ url_for('project', id=l.id, title=l.title) }}"><span> {{ l.title }} </span> <span style="float:right;"> Published: {{ moment(l.date_published).format('L') }}</span></a></li>
 				{% else %}
-				<li><a href="{{ url_for('project_synopsis', id=l.id, title=l.title) }}">{{ l.title }}</a></li>
+				<li><a href="{{ url_for('project_synopsis', id=l.id, title=l.title) }}"><span> {{ l.title }} </span> <span style="float:right;"> Published: {{ moment(l.date_published).format('L') }}</span></a></li>
 				<!--li role="presentation"><a href="#" data-toggle="modal" data-target="#library_modal_{{ l.id }}">{{ l.title }}</a></li-->
 				{% endif %}
 				{% endfor %}
