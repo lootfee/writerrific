@@ -12,11 +12,14 @@
 				<li><a href="#{{ c.chapter_title }}_anchor">{{ c.chapter_no }}</a></li>
 				{% endfor %}
 				{% endif %}
+				{% if current_user.is_authenticated %}
 				{% if project.author == current_user %}
 				{% if project.date_published is none %}
 				<li><a href="#" data-toggle="modal" data-target="#create_chapter_modal">Create chapter</a></li>
 				{% endif %}
 				{% endif %}
+				{% endif %}
+				{% if current_user.is_authenticated %}
 				{% if project.author == current_user %}
 				{% if project.date_published is none and project.date_seek_review is none %}
 				<li><a href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for review</a></li>
@@ -24,6 +27,8 @@
 				<li><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></li>
 				{% endif %}
 				{% endif %}
+				{% endif %}
+				{% if current_user.is_authenticated %}
 				{% if project.author == current_user %}
 				{% if project.date_published is none %}
 				<li ><a href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></li>
@@ -31,7 +36,9 @@
 				<li><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></li>
 				{% endif %}
 				{% endif %}
-				
+				{% else %}
+				<li><a href="#" >Login to rate this book.</a></li>
+				{% endif %}
 			  </ul>
 			 
 			</nav>
@@ -39,6 +46,7 @@
 		</div>
 	<div class="row">
 		<div class="col-md-2 col-sm-2 col-xs-2" id="proj_sidenav" style="border-right:solid 2px #808080; position:fixed; height:100%;">
+			{% if current_user.is_authenticated %}
 			{% if project.author == current_user %}
 			{% if project.date_published is none %}
 			{% if form %}
@@ -48,26 +56,32 @@
 			{% endif %}
 			{% endif %}
 			{% endif %}
+			{% endif %}
 			<br>
 			<div class="col-md-12" style="height:60%;overflow-y:auto;overflow-x:hidden;">
 				<ul class="list-group" style="list-style-type:none;">
 				{% if chapters %}
 				{% for c in chapters %}
-					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if project.author == current_user %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}</li>
+					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
 				{% endfor %}
 				{% endif %}
 				<li></li>
 				</ul>
 				<div class="col-md-12" style="margin-bottom: 0;">
 					{% if project.date_published %}
+					{% if current_user.is_authenticated %}
 					{% if project.is_rated(current_user)%}
 					<p><a href="#" data-toggle="modal" data-target="#review_modal" >You scored this book a {{project.is_score(current_user)}}.</a></p>
 					{% else %}
 					<p><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></p>
 					{% endif %}
+					{% else %}
+					<p><a href="#" >Login to rate this book.</a></p>
+					{% endif %}
 					{% endif %}
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12" id="comment_btn">
+					{% if current_user.is_authenticated %}
 					{% if project.author == current_user %}
 					{% if project.date_published is none and project.date_seek_review is none %}
 					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for advice</a></p>
@@ -75,11 +89,14 @@
 					<p><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></p>
 					{% endif %}
 					{% endif %}
+					{% endif %}
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12" id="publish_btn">
+					{% if current_user.is_authenticated %}
 					{% if project.author == current_user %}
 					{% if project.date_published is none %}
 					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a>
+					{% endif %}
 					{% endif %}
 					{% endif %}
 				</div>
@@ -88,10 +105,11 @@
 			</div>
 		</div>
 		<div class="col-md-10 col-sm-12 col-xs-12 main_body" style="position:absolute; margin-bottom: 50px;">
-			<div class="row">
+			<div class="row" style="margin-bottom:100px;">
 				<div class="col-md-2 col-sm-2 col-xs-2"></div>
 				<div class="col-md-8 col-sm-8 col-xs-8 text-center">
 					<h1 style="font-family: serif;font-weight: bold;">{{ project.title }}</h1>
+					<a href="{{url_for('user', username=project.author.username)}}"><h3>By: {{ project.author.username }}</h3></a>
 				</div>
 				<div class="col-md-2 col-sm-2 col-xs-2"></div>
 			</div>
@@ -120,6 +138,7 @@
 			</div>
 		</div>
 	</div>
+	{% if current_user.is_authenticated %}
 	{% if project.author == current_user %}
 	{% if project.date_published is none %}
 	{% if form %}
@@ -136,6 +155,8 @@
 	{% endif %}
 	{% endif %}
 	{% endif %}
+	{% endif %}
+	
 	{% if project.date_published %}
 	<div class="modal fade" id="review_modal" tabindex="-1" role="dialog" aria-labelledby="review_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
@@ -149,6 +170,8 @@
 	  </div>
 	</div>
 	{% endif %}
+	
+	{% if current_user.is_authenticated %}
 	{% if project.author == current_user %}
 	{% if project.date_published is none and project.date_seek_review is none %}
 	<div class="modal fade" id="post_for_review_modal" tabindex="-1" role="dialog" aria-labelledby="post_for_review_modal_Label">
@@ -164,6 +187,9 @@
 	</div>
 	{% endif %}
 	{% endif %}
+	{% endif %}
+	
+	{% if current_user.is_authenticated %}
 	{% if project.author == current_user %}
 	{% if project.date_published is none %}
 	<div class="modal fade" id="publish_modal" tabindex="-1" role="dialog" aria-labelledby="publish_modal_Label">
@@ -177,6 +203,7 @@
 		</div>
 	  </div>
 	</div>
+	{% endif %}
 	{% endif %}
 	{% endif %}
 </div>	

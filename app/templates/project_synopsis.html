@@ -9,7 +9,7 @@
 				<tr>
 					<td>
 						<h1 class="text-center">{{ project.title }}</h1>
-						<a href="{{url_for('user', username=project.author.username)}}"><div class="text-center">Author: {{ project.author.username }}</div></a>{% if user.is_superuser() == True %}<span><a href="{{url_for('quarantine_project', id=project.id)}}">Quarantine</a></span>{% endif %}
+						<a href="{{url_for('user', username=project.author.username)}}"><div class="text-center">Author: {{ project.author.username }}</div></a>{% if current_user.is_authenticated %}{% if current_user.is_superuser() == True %}<span><a href="{{url_for('quarantine_project', id=project.id)}}">Quarantine</a></span>{% endif %}{% endif %}
 						<div><span class="text-center">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span><span style="float:right;">{% if last_date_submitted%}Last updated: {{ moment(last_date_submitted).calendar() }}{% endif%}</span></div>
 						
 					</td>
@@ -22,20 +22,20 @@
 					<td>
 					<span class="col-md-3 col-sm-2 col-xs-2">
 						<div>
-							{% if project.upvoted(current_user) %}
+							{% if current_user.is_authenticated %}{% if project.upvoted(current_user) %}
 							<span class="btn btn-primary upvote" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('upvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"style="color:white;"></span></a></span>
 							{% else %}
 							<span class="btn btn-default upvote" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('upvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a></span>
 							{% endif %}
-							<span style="font-size: 11px;font-style:italic;color:blue;"> {% if project.upvotes %}{{ project.upvoters.count()}} {% else %}0 {% endif %} </span>
+							<span style="font-size: 11px;font-style:italic;color:blue;"> {% if project.upvotes %}{{ project.upvoters.count()}} {% else %}0 {% endif %} </span>{% endif %}
 						</div>
 						<div>
-							{% if project.downvoted(current_user) %}
+							{% if current_user.is_authenticated %}{% if project.downvoted(current_user) %}
 							<span class="btn btn-danger" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('downvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color:white;"></span></a></span>
 							{% else %}
 							<span class="btn btn-default" aria-label="Left Align" style="padding:2px 8px;"><a href="{{ url_for('downvote', id=project.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a></span>
 							{% endif %}
-							<span style="font-size: 11px;font-style:italic;color:red;"> {% if project.downvotes %}{{ project.downvoters.count() }} {% else %}0 {% endif %}</span>
+							<span style="font-size: 11px;font-style:italic;color:red;"> {% if project.downvotes %}{{ project.downvoters.count() }} {% else %}0 {% endif %}</span>{% endif %}
 						</div>
 					</span>
 					<span class="col-md-6 col-sm-4 col-xs-4 text-center">
@@ -51,12 +51,14 @@
 					<span class="col-md-3 col-sm-3 col-xs-3">
 						{% if project.date_published %}
 						<div class="col-md-10 col-sm-9 col-xs-9">
-						{% if project.is_purchased(current_user)%}
+						{% if current_user.is_authenticated and project.is_purchased(current_user)%}
 						<a href="{{ url_for('project', id=project.id, title=project.title) }}"><input class="btn btn-primary" value="View in library"></a>
-						{% elif project.author == current_user %}
+						{% elif current_user.is_authenticated and project.author == current_user %}
 						<a href="{{ url_for('project', id=project.id, title=project.title)}}"><input class="btn btn-default" value="View in portfolio"></a>
-						{% else %}
+						{% elif current_user.is_authenticated %}
 						<a href="{{ url_for('add_to_library', id=project.id)}}"><input class="btn btn-default" value="Add to library"></a>
+						{% else %}
+						<a href="{{ url_for('project', id=project.id, title=project.title)}}"><input class="btn btn-default" value="Read Story"></a>
 						{% endif %}
 						</div>
 						{% endif %}

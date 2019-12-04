@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app, make_response
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, CreateProjectForm, EditProjectForm, CreateChapterForm, EditChapterForm, CommentForm, PublishForm, ReviewForm, CommentReviewForm
 from app.models import User, Project, Comment, Chapter, Genre, Rating
-from datetime import datetime
+from datetime import datetime, timedelta
 import markdown2 
 
 
@@ -78,7 +78,6 @@ def register():
     return render_template('register.html', title='Register', form=form)
 	
 @app.route('/user/<username>', methods=['GET', 'POST'])
-@login_required
 def user(username):
 	user = User.query.filter_by(username=username).first_or_404()
 	portfolio = Project.query.filter_by(user_id=user.id, date_quarantined=None).all()
@@ -214,7 +213,6 @@ def reset_password(token):
     return render_template('reset_password.html', form=form)
 	
 @app.route('/project/<id>/<title>', methods=['GET', 'POST'])
-@login_required
 def project(id, title):
 	project = Project.query.filter_by(id=id).first()
 	chapters = Chapter.query.filter_by(project_id=project.id).order_by(Chapter.chapter_no.asc()).all()
@@ -246,22 +244,21 @@ def project(id, title):
 	return render_template('project.html', project=project, form=form, form1=form1, form2=form2, form3=form3, chapters=chapters)
 	
 @app.route('/project_synopsis/<id>/<title>', methods=['GET', 'POST'])
-@login_required
 def project_synopsis(id, title):
 	project = Project.query.filter_by(id=id).first()
-	user = User.query.filter_by(username=current_user.username).first()
+	#user = User.query.filter_by(username=current_user.username).first()
 	last_date_submitted = ''
 	if project.chapters is not None:
 		last_date_submitted = project.chapters.order_by(Chapter.date_submitted.desc()).first().date_submitted
 	form = CommentForm()
 	if form.validate_on_submit():
-		comment = Comment(body=form.comment.data, user_id=user.id, project_id=project.id)
+		comment = Comment(body=form.comment.data, user_id=current_user.id, project_id=project.id)
 		db.session.add(comment)
 		db.session.commit()
 		return redirect(url_for('project_synopsis', id=project.id, title=project.title))
 	comments = Comment.query.filter_by(project_id=project.id).order_by(Comment.timestamp.desc()).all()
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
-	return render_template('project_synopsis.html', project=project, user=user, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
+	return render_template('project_synopsis.html', project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
 	
 @app.route('/quarantine_project/<id>', methods=['GET', 'POST'])
 @login_required
@@ -311,3 +308,27 @@ def add_to_library(id):
 	user.books.append(project)
 	db.session.commit()
 	return redirect(url_for('project', id=project.id, title=project.title))
+	
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    '''Generate sitemap.xml iterating over static and dynamic routes to make a list of urls and date modified'''
+    pages = []
+    ten_days_ago = datetime.now() - timedelta(days=10)
+    
+    # get static routes
+    for rule in current_app.url_map.iter_rules():
+        # check for a 'GET' request and that the length of arguments is = 0 and if you have an admin area that the rule does not start with '/admin'
+        if 'GET' in rule.methods and len(rule.arguments) == 0 and not rule.rule.startswith('/admin'):
+            pages.append(['https://www.writerrific.com' + rule.rule, ten_days_ago])
+            
+    # get dynamic routes for blog
+    projects = Project.query.filter(Project.date_published.isnot(None)).order_by(Project.date_published.desc()).all()
+    for project in projects:
+        url = url_for('project', id=project.id, title=project.title)
+        modified_time = project.date_published.date().isoformat()
+        pages.append([url, modified_time])
+        
+    sitemap_template = render_template('sitemap_template.xml', pages=pages)
+    response = make_response(sitemap_template)
+    response.headers["Content-Type"] = "application/xml"
+    return response
