@@ -268,6 +268,14 @@ def quarantine_project(id):
 	db.session.commit()
 	return redirect(url_for('index'))
 	
+@app.route('/unpublish_project/<id>', methods=['GET', 'POST'])
+@login_required
+def unpublish_project(id):
+	project = Project.query.filter_by(id=id).first()
+	project.date_published = None
+	db.session.commit()
+	return redirect(url_for('index'))
+	
 @app.route('/upvote/<int:id>', methods=['GET', 'POST'])
 @login_required
 def upvote(id):
