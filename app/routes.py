@@ -319,7 +319,7 @@ def sitemap():
     for rule in current_app.url_map.iter_rules():
         # check for a 'GET' request and that the length of arguments is = 0 and if you have an admin area that the rule does not start with '/admin'
         if 'GET' in rule.methods and len(rule.arguments) == 0 and not rule.rule.startswith('/admin'):
-            pages.append(['https://www.writerrific.com' + rule.rule, ten_days_ago.isoformat()])
+            pages.append(['https://www.writerrific.com' + rule.rule, ten_days_ago.date().isoformat()])
             
     # get dynamic routes for blog
     projects = Project.query.filter(Project.date_published.isnot(None)).order_by(Project.date_published.desc()).all()
