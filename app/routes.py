@@ -212,7 +212,7 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 	
-@app.route('/project/<id>/<title>', methods=['GET', 'POST'])
+@app.route('/stories/<id>/<title>', methods=['GET', 'POST'])
 def project(id, title):
 	project = Project.query.filter_by(id=id).first()
 	chapters = Chapter.query.filter_by(project_id=project.id).order_by(Chapter.chapter_no.asc()).all()
@@ -247,7 +247,7 @@ def project(id, title):
 	keywords = (', '.join(genre))
 	return render_template('project.html', title=project.title, keywords=keywords, description=project.synopsis, project=project, form=form, form1=form1, form2=form2, form3=form3, chapters=chapters)
 	
-@app.route('/project_synopsis/<id>/<title>', methods=['GET', 'POST'])
+@app.route('/synopsis/<id>/<title>', methods=['GET', 'POST'])
 def project_synopsis(id, title):
 	project = Project.query.filter_by(id=id).first()
 	#user = User.query.filter_by(username=current_user.username).first()
