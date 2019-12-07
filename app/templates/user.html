@@ -32,19 +32,26 @@
 				{% for p in portfolio %}
 				{% if current_user.is_authenticated and user == current_user %}
 				<li>
-					<a href="{{ url_for('project', id=p.id, title=p.title) }}" style="width:90%; display:inline-flex;">
+					{% if p.date_published %}
+					<a href="{{ url_for('project', id=p.id, title=p.title) }}">
 						<span> {{ p.title }} </span> 
-						<span style="margin-left:20px;">{% if p.date_published %} Published: {{ moment(p.date_published).format('L') }} {% endif %} &nbsp;</span>
+						<span style="float:right;"> Published: {{ moment(p.date_published).format('L') }}  &nbsp;</span>
 					</a>
-					
-					<a href="#" data-toggle="modal" data-target="#project_edit_modal_{{ p.id }}" style="display:inline-flex;">
+					{% else %}
+					<a href="{{ url_for('project', id=p.id, title=p.title) }}" style="width:85%; display:inline-flex;">
+						<span> {{ p.title }} </span> 
+					</a>
+					<a href="#" data-toggle="modal" data-target="#project_edit_modal_{{ p.id }}" style="width:10%;display:inline-flex;">
 						<span class="glyphicon glyphicon-pencil" title="edit project name" aria-hidden="true" style="float:right;"></span>
 					</a>
+					{% endif %}
 				</li>
-				{% elif p.date_published %}
-				<li><a href="{{ url_for('project_synopsis', id=p.id, title=p.title) }}"><span> {{ p.title }} </span> <span style="float:right;">{% if p.date_published %} Published: {{ moment(p.date_published).format('L') }} {% endif %}</span></a></li>
 				{% else %}
-				<li role="presentation"><a href="#" data-toggle="modal" data-target="#project_modal_{{ p.id }}">{{ p.title }}</a></li>
+					{% if p.date_published %}
+					<li><a href="{{ url_for('project_synopsis', id=p.id, title=p.title) }}"><span> {{ p.title }} </span> <span style="float:right;">{% if p.date_published %} Published: {{ moment(p.date_published).format('L') }} {% endif %}</span></a></li>
+					{% else %}
+					<li role="presentation"><a href="#" data-toggle="modal" data-target="#project_modal_{{ p.id }}">{{ p.title }}</a></li>
+					{% endif %}
 				{% endif %}
 				{% endfor %}
 				{% endif %}

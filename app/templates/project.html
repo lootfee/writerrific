@@ -29,13 +29,23 @@
 				{% endif %}
 				{% endif %}
 				{% if current_user.is_authenticated %}
-				{% if project.author == current_user %}
-				{% if project.date_published is none %}
-				<li ><a href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></li>
-				{% else %}
-				<li><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></li>
-				{% endif %}
-				{% endif %}
+					{% if project.author == current_user %}
+						{% if project.date_published is none %}
+						<li ><a href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></li>
+						{% else %}
+							{% if project.is_rated(current_user)%}
+							<li><a href="#" data-toggle="modal" data-target="#review_modal" >You scored this book a {{project.is_score(current_user)}}.</a></li>
+							{% else %}
+							<li><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></li>
+							{% endif %}
+						{% endif %}
+					{% else %}
+						{% if project.is_rated(current_user)%}
+						<li><a href="#" data-toggle="modal" data-target="#review_modal" >You scored this book a {{project.is_score(current_user)}}.</a></li>
+						{% else %}
+						<li><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></li>
+						{% endif %}
+					{% endif %}
 				{% else %}
 				<li><a href="#" >Login to rate this book.</a></li>
 				{% endif %}
