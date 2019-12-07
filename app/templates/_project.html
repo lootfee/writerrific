@@ -30,7 +30,7 @@
 						<a href="{{ url_for('project_synopsis', id=project.id, title=project.title)}}" style="color:#0066ff; font-weight:bold;"><p>{{ project.title }}</p></a>
 						<a href="{{ url_for('user', username=project.author.username) }}" style="color:#0066ff;"><p>By: {{ project.author.username }}</p></a>
 						</div>
-						
+						{% if current_user.is_authenticated %}{% if current_user.is_superuser() == True %}<span><a href="{{url_for('quarantine_project', id=project.id)}}"> Quarantine </a></span><span><a href="{{url_for('unpublish_project', id=project.id)}}"> Unpublish </a></span>{% endif %}{% endif %}
 					</span>
 					<span class="col-md-2 col-sm-2 col-xs-2">
 						{% if project.date_published %}
