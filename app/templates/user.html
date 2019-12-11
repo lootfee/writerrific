@@ -12,9 +12,9 @@
 			{% if current_user.is_authenticated %}{% if user == current_user %}
 			<p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
 			{% elif not current_user.is_following(user) %}
-			<p><a href="{{ url_for('follow', username=user.username) }}">Follow</a></p>
+			<p><button class="btn btn-sm btn-info" href="{{ url_for('follow', username=user.username) }}">Follow</button></p>
 			{% else %}
-			<p><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></p>
+			<p><button class="btn btn-sm btn-warning" href="{{ url_for('unfollow', username=user.username) }}">Unfollow</button></p>
 			{% endif %}{% endif %}
 			
     </table>
@@ -23,14 +23,14 @@
 		<div class="col-md-6">
 			{% if current_user.is_authenticated %}
 			{% if user == current_user %}
-			<p><a href="#" data-toggle="modal" data-target="#create_project_modal" style="float:right;">Create Project</a></p>
+			<p><button class="btn btn-default" href="#" data-toggle="modal" data-target="#create_project_modal" style="float:right;"><strong>Create Project</strong></button></p>
 			{% endif %}
 			{% endif %}
 			<h3>Portfolio</h3>
 			<ul class="nav nav-pills nav-stacked" role="tablist">
 				{% if portfolio %}
 				{% for p in portfolio %}
-				{% if current_user.is_authenticated and user == current_user %}
+				{% if current_user.is_authenticated and user == current_user or  current_user.is_authenticated and current_user.is_superuser() == True %}
 				<li>
 					{% if p.date_published %}
 					<a href="{{ url_for('project', id=p.id, title=p.title) }}">
@@ -100,7 +100,7 @@
 	</div>
 	{% endif %}
 	
-	{% if current_user.is_authenticated and user == current_user %}
+	{% if current_user.is_authenticated and user == current_user or current_user.is_authenticated and current_user.is_superuser() == True %}
 	<div class="modal fade" id="project_edit_modal_{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="project_{{p.id}}_edit_modalLabel">
 	  <div class="modal-dialog" role="document">
 		<div class="modal-content">

@@ -61,7 +61,7 @@
 			{% if project.date_published is none %}
 			{% if form %}
 			<div class="col-md-12">
-				<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#create_chapter_modal" style="float:right;font-size:12px;">Create chapter</a></p>
+				<p><button class="btn btn-sm btn-default" href="#" data-toggle="modal" data-target="#create_chapter_modal" style="float:right;font-size:12px;">Create chapter</button></p>
 			</div>
 			{% endif %}
 			{% endif %}
@@ -72,7 +72,7 @@
 				<ul class="list-group" style="list-style-type:none;">
 				{% if chapters %}
 				{% for c in chapters %}
-					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
+					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
 				{% endfor %}
 				{% endif %}
 				<li></li>
@@ -92,26 +92,36 @@
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12" id="comment_btn">
 					{% if current_user.is_authenticated %}
-					{% if project.author == current_user %}
+					{% if project.author == current_user or current_user.is_superuser() == True %}
 					{% if project.date_published is none and project.date_seek_review is none %}
-					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for advice</a></p>
+					<p><button class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal"><strong>Post for advice</strong></button></p>
 					{% elif project.date_published is none and project.date_seek_review %}
-					<p><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></p>
+					<p><button class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}"><strong>Check comments</strong></button></p>
 					{% endif %}
 					{% endif %}
 					{% endif %}
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12" id="publish_btn">
 					{% if current_user.is_authenticated %}
-					{% if project.author == current_user %}
+					{% if project.author == current_user or current_user.is_superuser() == True %}
 					{% if project.date_published is none %}
-					<p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal">Publish</a>
+					<p><button class="btn btn-default" href="#" data-toggle="modal" data-target="#publish_modal"><strong>Publish</strong></button>
 					{% endif %}
 					{% endif %}
 					{% endif %}
 				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="fb-like" data-href="{{url_for('project', id=project.id, title=project.title )}}" data-width="" data-layout="button" data-action="like" data-size="small" data-share="true"></div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-3">
+						<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+					</div>
+				</div>
 				<div class="row" style="margin-bottom:20px;"></div>
-				
 			</div>
 		</div>
 		<div class="col-md-10 col-sm-12 col-xs-12 main_body" style="position:absolute; margin-bottom: 50px;">
@@ -132,7 +142,7 @@
 						<!--to make href="#id" of section not on top of page-->
 						<span class="anchor" id="{{ c.chapter_title }}_anchor"></span>
 						<section >
-							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title }}</h2><span id="chapter_edit_mobile">{% if project.author == current_user %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}</span></header>
+							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title }}</h2><span id="chapter_edit_mobile">{% if project.author == current_user or current_user.is_superuser() == True %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}</span></header>
 								<article>
 									{% if c.body %}
 										{{ c.body|safe }}
@@ -149,7 +159,7 @@
 		</div>
 	</div>
 	{% if current_user.is_authenticated %}
-	{% if project.author == current_user %}
+	{% if project.author == current_user or current_user.is_superuser() == True %}
 	{% if project.date_published is none %}
 	{% if form %}
 	<div class="modal fade" id="create_chapter_modal" tabindex="-1" role="dialog" aria-labelledby="create_chapter_modal_Label">
@@ -182,7 +192,7 @@
 	{% endif %}
 	
 	{% if current_user.is_authenticated %}
-	{% if project.author == current_user %}
+	{% if project.author == current_user or current_user.is_superuser() == True %}
 	{% if project.date_published is none and project.date_seek_review is none %}
 	<div class="modal fade" id="post_for_review_modal" tabindex="-1" role="dialog" aria-labelledby="post_for_review_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
@@ -200,7 +210,7 @@
 	{% endif %}
 	
 	{% if current_user.is_authenticated %}
-	{% if project.author == current_user %}
+	{% if project.author == current_user or current_user.is_superuser() == True %}
 	{% if project.date_published is none %}
 	<div class="modal fade" id="publish_modal" tabindex="-1" role="dialog" aria-labelledby="publish_modal_Label">
 	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
@@ -223,6 +233,14 @@
 
 {% block styles %}
 {{ super() }}
+<!--Facebook share button-->
+ <!-- You can use Open Graph tags to customize link previews.
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+  <meta property="og:url"           content="{{url_for('project', id=project.id, title=project.title )}}" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="{{ project.title }}" />
+  <meta property="og:description"   content="project.synopsis" />
+  <!--meta property="og:image"         content="https://www.your-domain.com/path/image.jpg" /-->
 <style>
 	.modal-dialog,
 	.medium-modal {

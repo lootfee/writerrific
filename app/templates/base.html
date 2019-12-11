@@ -17,6 +17,7 @@
 {% endif %}
 {% endmacro %}
 
+
 {% block navbar %}
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
@@ -59,7 +60,10 @@
 {% endblock %}
 
 {% block content %}
-	
+		<!-- facebook js sdk-->
+		<div id="fb-root"></div>
+		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0"></script>
+
 		{% with messages = get_flashed_messages() %}
 		{% if messages %}
 		<div class="container">
@@ -76,16 +80,26 @@
 	{% endblock %}
 	
 	{% block footer %}
-	<footer style="position: fixed;left: 0;bottom: 0;width: 100%;background-color: #efefef;  color: black;text-align: center;font-size: 12px;margin-top:25px;">© 2019 Writerrific All Right Reserved <span style="float:right;">contact us at: admin@writerrific.com&nbsp;&nbsp;&nbsp;</span></footer>
+	<footer style="position: fixed;left: 0;bottom: 0;width: 100%;background-color: #efefef;  color: black;text-align: center;font-size: 12px;margin-top:25px;">© 2019 Writerrific All Right Reserved <span style="float:right;">contact: admin@writerrific.com&nbsp;&nbsp;&nbsp;</span></footer>
 	{% endblock %}
 
 {% endblock %}
 
 {% block styles %}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129673699-3"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-129673699-3');
+	</script>
+
 	{% if description %}
 	<meta name="description" content="{{ description }}">
 	{% else %}
-	<meta name="description" content="Writers and readers superhighway">
+	<meta name="description" content="Write terrific be a writerrific!">
 	{% endif %}
 	{% if keywords %}
 	<meta name="keywords" content="{{ keywords }}">
