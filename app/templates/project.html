@@ -72,7 +72,7 @@
 				<ul class="list-group" style="list-style-type:none;">
 				{% if chapters %}
 				{% for c in chapters %}
-					<li><span class="col-md-10"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
+					<li><span class="col-md-10 sidenav_list"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" target="_blank"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
 				{% endfor %}
 				{% endif %}
 				<li></li>
@@ -294,6 +294,21 @@
 	.main_body {
 		margin-left: 17%;
 	}
+	
+	.sidenav_list {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		/*transform: translateX(0);
+		transition: 1s;*/
+	}
+	
+	/*.move_left:hover {
+		width: auto;
+		transform: translateX(calc(200px - 100%));
+	}*/
+	
+	
 	@media (max-width: 960px) {
 	  #proj_sidenav     { display: none; }
 	  #comment_btn { display: none; }
@@ -327,4 +342,15 @@
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
+<!--script>
+$(document).ready(function() {
+	$(".sidenav_list a span").each(function() {
+		var lengthVal=($(this).text().length);
+		  if(lengthVal>16){
+			$(".sidenav_list").addClass("move_left");
+		  }
+	});
+});
+</script-->
+
 {% endblock %}
