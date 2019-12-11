@@ -268,7 +268,7 @@ def project_synopsis(id, title):
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
 	return render_template('project_synopsis.html', title=project.title, description=project.synopsis, keywords=keywords, project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
 	
-'''@app.route('/delete_project/<int:id>', methods=['GET', 'POST'])
+@app.route('/delete_project/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_project(id):
 	project = Project.query.filter_by(id=id).first()
@@ -282,7 +282,7 @@ def delete_project(id):
 	for p in project.chapters:
 		session.delete(p)
 	db.session.commit()
-	return redirect(url_for('index'))'''
+	return redirect(url_for('user', username=current_user.username))
 	
 @app.route('/delete_project/<id>', methods=['GET', 'POST'])
 @login_required
@@ -295,7 +295,7 @@ def quarantine_project(id):
 	project = Project.query.filter_by(id=id).first()
 	project.date_quarantined = datetime.utcnow()
 	db.session.commit()
-	return redirect(url_for('user', username=current_user.username))
+	return redirect(url_for('index'))
 	
 @app.route('/unpublish_project/<id>', methods=['GET', 'POST'])
 @login_required
@@ -347,6 +347,21 @@ def chapter(id):
 		db.session.commit()
 		return redirect(url_for('project', id=project.id, title=project.title))
 	return render_template('chapter.html', chapter=chapter, project=project, form=form)
+	
+@app.route('/delete_chapter/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_chapter(id):
+	chapter = Chapter.query.filter_by(id=id).first()
+	project = Project.query.filter_by(id=chapter.project_id).first()
+	if current_user.is_anonymous:
+		return redirect(url_for('index'))
+	if current_user.is_authenticated:
+		if current_user.is_superuser() == False:
+			if project.author is not current_user:
+				return redirect(url_for('index'))
+	db.session.delete(chapter)
+	db.session.commit()
+	return redirect(url_for('project', id=project.id, title=project.title))
 	
 @app.route('/add_to_library/<int:id>', methods=['GET', 'POST'])
 @login_required
