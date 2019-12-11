@@ -268,7 +268,7 @@ def project_synopsis(id, title):
 	reviews = Rating.query.filter_by(project_id=project.id).order_by(Rating.timestamp.desc()).all()
 	return render_template('project_synopsis.html', title=project.title, description=project.synopsis, keywords=keywords, project=project, form=form, comments=comments, reviews=reviews, last_date_submitted=last_date_submitted)
 	
-@app.route('/delete_project/<int:id>', methods=['GET', 'POST'])
+'''@app.route('/delete_project/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_project(id):
 	project = Project.query.filter_by(id=id).first()
@@ -282,9 +282,9 @@ def delete_project(id):
 	for p in project.chapters:
 		session.delete(p)
 	db.session.commit()
-	return redirect(url_for('index'))
+	return redirect(url_for('index'))'''
 	
-@app.route('/quarantine_project/<id>', methods=['GET', 'POST'])
+@app.route('/delete_project/<id>', methods=['GET', 'POST'])
 @login_required
 def quarantine_project(id):
 	if current_user.is_anonymous:
