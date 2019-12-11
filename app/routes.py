@@ -295,7 +295,7 @@ def quarantine_project(id):
 	project = Project.query.filter_by(id=id).first()
 	project.date_quarantined = datetime.utcnow()
 	db.session.commit()
-	return redirect(url_for('index'))
+	return redirect(url_for('user', username=current_user.username))
 	
 @app.route('/unpublish_project/<id>', methods=['GET', 'POST'])
 @login_required
