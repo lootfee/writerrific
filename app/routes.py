@@ -271,8 +271,11 @@ def project_synopsis(id, title):
 @app.route('/quarantine_project/<id>', methods=['GET', 'POST'])
 @login_required
 def quarantine_project(id):
-	if current_user.is_superuser() == False:
+	'''if current_user.is_anonymous:
 		return redirect(url_for('index'))
+	if current_user.is_authenticated:
+		if current_user.is_superuser() == False:
+			return redirect(url_for('index'))'''
 	project = Project.query.filter_by(id=id).first()
 	project.date_quarantined = datetime.utcnow()
 	db.session.commit()
@@ -281,8 +284,11 @@ def quarantine_project(id):
 @app.route('/unpublish_project/<id>', methods=['GET', 'POST'])
 @login_required
 def unpublish_project(id):
-	if current_user.is_superuser() == False:
+	'''if current_user.is_anonymous:
 		return redirect(url_for('index'))
+	if current_user.is_authenticated:
+		if current_user.is_superuser() == False:
+			return redirect(url_for('index'))'''
 	project = Project.query.filter_by(id=id).first()
 	project.date_published = None
 	db.session.commit()
@@ -311,9 +317,12 @@ def downvote(id):
 def chapter(id):
 	chapter = Chapter.query.filter_by(id=id).first()
 	project = Project.query.filter_by(id=chapter.project_id).first()
-	if current_user.is_superuser() == False:
-		if project.author is not current_user:
-			return redirect(url_for('index'))
+	'''if current_user.is_anonymous:
+		return redirect(url_for('index'))
+	if current_user.is_authenticated:
+		if current_user.is_superuser() == False:
+			if project.author is not current_user:
+				return redirect(url_for('index'))'''
 	form = EditChapterForm()
 	if form.validate_on_submit():
 		chapter.chapter_no = form.edit_chapter_number.data
@@ -328,9 +337,12 @@ def chapter(id):
 def add_to_library(id):
 	user = User.query.filter_by(username=current_user.username).first()
 	project = Project.query.filter_by(id=id).first()
-	if current_user.is_superuser() == False:
-		if project.author is not current_user:
-			return redirect(url_for('index'))
+	'''if current_user.is_anonymous:
+		return redirect(url_for('index'))
+	if current_user.is_authenticated:
+		if current_user.is_superuser() == False:
+			if project.author is not current_user:
+				return redirect(url_for('index'))'''
 	user.books.append(project)
 	db.session.commit()
 	return redirect(url_for('project', id=project.id, title=project.title))
@@ -339,10 +351,12 @@ def add_to_library(id):
 @login_required
 def admin():
 	users = User.query.all()
+	'''if current_user.is_anonymous:
+		return redirect(url_for('index'))
 	if current_user.is_superuser() == False:
 		return redirect(url_for('index'))
-	else:
-		return render_template('admin.html', users=users)
+	else:'''
+	return render_template('admin.html', users=users)
 	
 @app.route('/sitemap.xml', methods=['GET'])
 def sitemap():
