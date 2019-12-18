@@ -20,6 +20,15 @@
 				{% endif %}
 				{% endif %}
 				{% if current_user.is_authenticated %}
+				{% if project.author == current_user %}
+				{% if project.date_published is none and project.date_seek_review is none %}
+				<li><a href="#" data-toggle="modal" data-target="#post_for_review_modal">Post for review</a></li>
+				{% elif project.date_published is none and project.date_seek_review %}
+				<li><a class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}">Check comments</a></li>
+				{% endif %}
+				{% endif %}
+				{% endif %}
+				{% if current_user.is_authenticated %}
 					{% if project.author == current_user %}
 						{% if project.date_published is none %}
 						<li ><a href="#" data-toggle="modal" data-target="#publish_modal">Publish</a></li>
@@ -60,7 +69,7 @@
 			{% endif %}
 			<br>
 			<div class="col-md-12" style="height:80%;overflow-y:auto;overflow-x:hidden;">
-				<ul class="list-group" style="list-style-type:none; font-size: 14px;">
+				<ul class="list-group" style="list-style-type:none;">
 				{% if chapters %}
 				{% for c in chapters %}
 					<li><span class="col-md-10 sidenav_list" title="{{ c.chapter_title }}"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
@@ -68,18 +77,27 @@
 				{% endif %}
 				<li></li>
 				</ul>
-				<br>
-				<br>
 				<div class="col-md-12" style="margin-bottom: 0;">
 					{% if project.date_published %}
 					{% if current_user.is_authenticated %}
 					{% if project.is_rated(current_user)%}
-					<p><a href="#" data-toggle="modal" data-target="#review_modal" >You scored this story a {{project.is_score(current_user)}}.</a></p>
+					<p><a href="#" data-toggle="modal" data-target="#review_modal" >You scored this book a {{project.is_score(current_user)}}.</a></p>
 					{% else %}
-					<p><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this story.</a></p>
+					<p><a href="#" data-toggle="modal" data-target="#review_modal" >Rate this book.</a></p>
 					{% endif %}
 					{% else %}
-					<p><a href="#" >Login to rate this story.</a></p>
+					<p><a href="#" >Login to rate this book.</a></p>
+					{% endif %}
+					{% endif %}
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12" id="comment_btn">
+					{% if current_user.is_authenticated %}
+					{% if project.author == current_user or current_user.is_superuser() == True %}
+					{% if project.date_published is none and project.date_seek_review is none %}
+					<p><button class="btn btn-default" href="#" data-toggle="modal" data-target="#post_for_review_modal"><strong>Post for advice</strong></button></p>
+					{% elif project.date_published is none and project.date_seek_review %}
+					<p><button class="btn btn-default" href="{{url_for('project_synopsis', id=project.id, title=project.title )}}"><strong>Check comments</strong></button></p>
+					{% endif %}
 					{% endif %}
 					{% endif %}
 				</div>
@@ -107,12 +125,12 @@
 			</div>
 		</div>
 		<div class="col-md-10 col-sm-12 col-xs-12 main_body" style="position:absolute; margin-bottom: 50px;">
-			<div class="row" style="margin-bottom:20px;">
-				<div class="col-md-2"></div>
-				<div class="col-md-8 col-sm-12 col-xs-12">
+			<div class="row" style="margin-bottom:100px;">
+				<div class="col-md-2 col-sm-2 col-xs-2"></div>
+				<div class="col-md-8 col-sm-8 col-xs-8">
 					<div class="text-center">
 						<h1 style="font-family: serif;font-weight: bold;">{{ project.title }}</h1>
-						<p style="font-family: sans-serif;font-size: 18px;color:#9c9c9c;">{% if project.synopsis %}{{ project.synopsis }}{% endif %}</p>
+						<p style="font-family: serif;font-size: 18px;">{% if project.synopsis %}{{ project.synopsis }}{% endif %}</p>
 					</div>
 					<div style="float:left">
 						<table>
@@ -128,19 +146,13 @@
 							</tr>
 						</table>
 					</div>
-				</div>
-				<div class="col-md-2"></div>
-			</div>
-			<div class="row" style="margin-bottom:50px;">
-				<div class="col-md-1"></div>
-				<div class="col-md-10 col-sm-12 col-xs-12">
-					<img src="{{ project.cover_pic }}" style="height:400px;width:100%;">
+					<img src="{{ project.cover_pic }}" style="height:400px;">
 					<span class="text-center">{{ project.cover_pic_cred|safe }}</span>
 				</div>
-				<div class="col-md-1"></div>
+				<div class="col-md-2 col-sm-2 col-xs-2"></div>
+				
 			</div>
-			
-			<div class="row" style="font-family: serif;font-size: 20px;">
+			<div class="row" style="font-family: serif;font-size: 18px;">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<ul class="list-group">
@@ -196,6 +208,24 @@
 		</div>
 	  </div>
 	</div>
+	{% endif %}
+	
+	{% if current_user.is_authenticated %}
+	{% if project.author == current_user or current_user.is_superuser() == True %}
+	{% if project.date_published is none and project.date_seek_review is none %}
+	<div class="modal fade" id="post_for_review_modal" tabindex="-1" role="dialog" aria-labelledby="post_for_review_modal_Label">
+	  <div class="modal-dialog" role="document" style="height: 80%;width: 80%;">
+		<div class="modal-content small-modal">
+		  <div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h3>Your project will be posted on the advice page so other users give comment on how you can improve.</h3>
+			{{wtf.quick_form(form1)}}
+		  </div>
+		</div>
+	  </div>
+	</div>
+	{% endif %}
+	{% endif %}
 	{% endif %}
 	
 	{% if current_user.is_authenticated %}
@@ -336,9 +366,6 @@
 		}
 		.main_body {
 			margin-left: 0;
-		}
-		article p img {
-			width: 90vw;
 		}
 	}
 </style>

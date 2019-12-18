@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, current_app, make_response
 from flask_login import current_user, login_user, logout_user, login_required
-from app import app, db
+from app import app, db, photos
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, CreateProjectForm, EditProjectForm, CreateChapterForm, EditChapterForm, CommentForm, PublishForm, ReviewForm, CommentReviewForm
 from app.models import User, Project, Comment, Chapter, Genre, Rating
 from datetime import datetime, timedelta
@@ -94,6 +94,11 @@ def user(username):
 			genres = form.genre.data
 			genre_list = genres.split(',')
 			proj = Project(title=form.title.data, synopsis=form.synopsis.data, user_id=current_user.id)
+			if form.cover_pic.data:
+				cover_pic_filename = photos.save(form.cover_pic.data)
+				proj.cover_pic = photos.url(cover_pic_filename)
+			if form.cover_pic_credit.data:
+				proj.cover_pic_credit = form.cover_pic_credit.data
 			db.session.add(proj)
 			db.session.commit()
 			for g in genre_list:
@@ -111,8 +116,11 @@ def user(username):
 		if form2.validate_on_submit():
 			edit_proj = Project.query.filter_by(id=form2.proj_id.data).first()
 			edit_proj.title = form2.edit_title.data
-			#edit_proj.edit_genre = form2.edit_genre.data
 			edit_proj.synopsis = form2.edit_synopsis.data
+			if form2.edit_cover_pic.data:
+				cover_pic_filename = photos.save(form2.edit_cover_pic.data)
+				edit_proj.cover_pic = photos.url(cover_pic_filename)
+			edit_proj.cover_pic_credit = form2.edit_cover_pic_credit.data
 			edit_genres = form2.edit_genre.data
 			edit_genre_list = edit_genres.split(',')
 			for g in edit_genre_list:
@@ -145,6 +153,9 @@ def edit_profile():
 		current_user.username = form.username.data
 		current_user.about_me = form.about_me.data
 		current_user.email = form.email.data
+		if form.profile_pic.data:
+			profile_pic_filename = photos.save(form.profile_pic.data)
+			current_user.profile_pic = photos.url(profile_pic_filename)
 		db.session.commit()
 		flash('Your changes have been saved.')
 		return redirect(url_for('user', username=current_user.username))
@@ -215,6 +226,8 @@ def reset_password(token):
 @app.route('/stories/<id>/<title>', methods=['GET', 'POST'])
 def project(id, title):
 	project = Project.query.filter_by(id=id).first()
+	if project.cover_pic_credit:
+		project.cover_pic_cred = markdown2.markdown(project.cover_pic_credit)
 	chapters = Chapter.query.filter_by(project_id=project.id).order_by(Chapter.chapter_no.asc()).all()
 	form = CreateChapterForm()
 	if form.submit_chapter.data and form.validate_on_submit():

@@ -1,0 +1,123 @@
+<div class="img_container">
+	<img src="{{ project.cover_pic }}" style="width: 100%;height:400px; border-radius: 10px;">
+	<div class="img_content">
+		<a href="{{ url_for('project', id=project.id, title=project.title)}}" style="color: aliceblue;"><h2>{{ project.title }}</h2></a>
+		<div class="project-introduction">{{ project.synopsis }}</div>
+		<div style="color: #adabab;">Topics: <span style="color:#adabab;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span><span style="float:right;"><a href="{{ url_for('project', id=project.id, title=project.title)}}" style="color: #adabab;">{{ project.ratings.count() }} responses</a></span></div>
+		<br>
+		<table>
+			<tr>
+				<td>{% if project.author.profile_pic %}<span><img src="{{ project.author.profile_pic }}" alt="author profile pic"></span>{% endif %}</td>
+				<td>
+					<a href="{{ url_for('user', username=project.author.username) }}" style="color:#f6f6f6">
+						<span class="author-username">{{ project.author.username }} </span>
+						<br>
+						<span style="color:#f6f6f6;"> {{ moment(project.date_published).format('ll') }}</span>
+						<span class="col-md-10"></span>
+						
+					</a>
+					{% if current_user.is_authenticated %}{% if current_user.is_superuser() == True %}<span><a href="{{url_for('quarantine_project', id=project.id)}}"> Quarantine </a></span><span><a href="{{url_for('unpublish_project', id=project.id)}}"> Unpublish </a></span>{% endif %}{% endif %}
+				</td>
+				<td>
+					{% if project.date_published %}
+					{% if project.ratings %}
+					<span>
+						<div>
+							<span><span class="glyphicon glyphicon-book" title="Story score" aria-hidden="true"></span> {{project.project_score()}}</span>
+						</div>
+					</span>
+					{% endif %}
+					{% endif %}
+					<span>
+						<div>
+							<span><span class="glyphicon glyphicon-user" title="Author score" aria-hidden="true"></span> {{ project.author.author_score()}}</span>
+						</div>
+					</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<!--table class="table table-hover" style=" border-collapse: separate !important;border-radius: 1em;overflow: hidden; margin-bottom:5px;">
+	<tr>
+		<td>
+			<div class="row">
+				<div class="col-md-12">
+					<span class="col-md-2 col-sm-2 col-xs-2">
+						<span>
+							<div>
+							{% if not current_user.is_anonymous and project.upvoted(current_user) %}
+							<span class="btn btn-primary upvote" data-postid="{{project.id}}" name="upvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none; border-color:#858cec;"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"style="color:white;"></span></span>
+							{% else %}
+							<span class="btn btn-default upvote" data-postid="{{project.id}}" name="upvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;border-color:#858cec;"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></span>
+							{% endif %}
+							<span style="font-size: 11px;font-style:italic;color:blue;">{% if project.upvotes %}{{ project.upvoters.count() }}{% else %}0 {% endif %} </span>		
+							</div>
+						</span>
+						<span>
+							<div>
+							{% if not current_user.is_anonymous and project.downvoted(current_user) %}
+							<span class="btn btn-danger downvote" name="downvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;border-color:#e84949;"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color:white;"></span></span>
+							{% else %}
+							<span class="btn btn-default downvote" name="downvote{{project.id}}" aria-label="Left Align" style="padding:2px 8px;pointer-events: none;border-color:#e84949;"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></span>
+							{% endif %}
+							<span style="font-size: 11px;font-style:italic;color:red;">{% if project.downvotes %}{{ project.downvoters.count() }}{% else %}0{% endif %}</span>
+							</div>
+						</span>
+					</span>
+					<span class="col-md-8 col-sm-8 col-xs-6" >
+						<div class="text-center">
+						<a href="{{ url_for('project', id=project.id, title=project.title)}}" style="color:#0066ff; font-weight:bold;"><p>{{ project.title }}</p></a>
+						<a href="{{ url_for('user', username=project.author.username) }}" style="color:#0066ff;"><p> {{ project.author.username }}</p></a>
+						</div>
+						{% if current_user.is_authenticated %}{% if current_user.is_superuser() == True %}<span><a href="{{url_for('quarantine_project', id=project.id)}}"> Quarantine </a></span><span><a href="{{url_for('unpublish_project', id=project.id)}}"> Unpublish </a></span>{% endif %}{% endif %}
+					</span>
+					<span class="col-md-2 col-sm-2 col-xs-2">
+						{% if project.date_published %}
+						{% if project.ratings %}
+						<span>
+							<div>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Book score: {{project.project_score()}}</span>
+							</div>
+						</span>
+						{% endif %}
+						{% endif %}
+						<span>
+							<div>
+								<span class="btn btn-default" aria-label="Right Align" style="padding:2px 8px;pointer-events: none;color: #dce3f3;  background-color:#153b9c;border-color: #858cec;">Author score: {{ project.author.author_score()}}</span>
+							</div>
+						</span>
+						<!--span>
+							<div>
+								<span style="float:right;">Last updated: </span>
+							</div>
+						</span-->
+						
+					<!--/span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span class="col-md-10">Genre: <span style="color: blue;">{% for p in project.genre %}{{ p.name }}, {% endfor %}</span></span>
+					{% if project.date_published %}
+					<span class="col-md-2">Published: {{ moment(project.date_published).format('l')}}</span>
+					{% endif %}
+				</div>
+				
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div>
+				{{ project.synopsis }}
+			</div>
+			{% if project.date_published %}
+			<span style="float:right;"><a href="{{ url_for('project_synopsis', id=project.id, title=project.title)}}">{{ project.comments.count() }} comments  &nbsp;&nbsp;&nbsp;{{ project.ratings.count() }} reviews</a></span>
+			{% elif project.date_seek_review %}
+			<span style="float:right;"><a href="{{ url_for('project_synopsis', id=project.id, title=project.title)}}">{{ project.comments.count() }} comments</a></span>
+			{% endif %}
+		</td>
+	</tr>
+</table-->

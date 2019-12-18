@@ -36,7 +36,6 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
 		{{ nav_link('index', 'Explore') }}
-		{{ nav_link('advice', 'For Advice') }}
       </ul>
 	  {% if users %}
       <form class="navbar-form navbar-left">
@@ -50,7 +49,7 @@
 		{% if current_user.is_anonymous %}
 		<li><a href="{{ url_for('login') }}">Login</a></li>
 		{% else %}
-		<li><a href="{{ url_for('user', username=current_user.username) }}">{% if current_user.profile_pic %}<span><img src="{{ current_user.profile_pic }}" alt="user profile pic" style="width: 22px; height: 22px;display: inline;"></span>{% endif %}<span><strong> {{ current_user.username }}</strong> </span></a></li>
+		<li><a href="{{ url_for('user', username=current_user.username) }}">{% if current_user.profile_pic %}<span><img src="{{ current_user.profile_pic }}" alt="user profile pic" style="width: 22px; height: 22px;display: inline;border-radius: 5px;"></span>{% endif %}<span><strong> {{ current_user.username }}</strong> </span></a></li>
 		<li><a href="{{ url_for('logout') }}">Logout</a></li>
 		{% endif %}
       </ul>
@@ -113,7 +112,7 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
 	{% endif %}
 	<style>
-	body { padding-top: 70px; padding-bottom: 90px;}
+	body { padding-top: 70px; padding-bottom: 90px; font-size: 16px;}
 	.navbar-default {
 		background-color: #ca0707;
 		border-color: #ece46f;

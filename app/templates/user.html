@@ -5,18 +5,25 @@
 <div class="container">
     <table>
         <tr valign="top">
-            <h1>{{ user.username }}</h1>
-			{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-            {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
-			<p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
-			{% if current_user.is_authenticated %}{% if user == current_user %}
-			<p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
-			{% elif not current_user.is_following(user) %}
-			<p><button class="btn btn-sm btn-info" href="{{ url_for('follow', username=user.username) }}">Follow</button></p>
-			{% else %}
-			<p><button class="btn btn-sm btn-warning" href="{{ url_for('unfollow', username=user.username) }}">Unfollow</button></p>
-			{% endif %}{% endif %}
-			
+			<td>
+				{% if user.profile_pic %}<span><img src="{{ user.profile_pic }}" alt="user profile pic" style="width: 256px; height: 256px;display: inline;border-radius: 35px;margin:20px;"></span>{% endif %}
+				
+			</td>
+			<td>
+			`	<h1>{{ user.username }}</h1>
+				{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+				{% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
+				<p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+				{% if current_user.is_authenticated %}{% if user == current_user %}
+				<p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
+				{% elif not current_user.is_following(user) %}
+				<a href="{{ url_for('follow', username=user.username) }}"><button class="btn btn-sm btn-info">Follow</button></a>
+				{% else %}
+				<a href="{{ url_for('unfollow', username=user.username) }}"><button class="btn btn-sm btn-warning">Unfollow</button></a>
+				{% endif %}{% endif %}
+			</td>
+        </tr>  
+		
     </table>
     <hr>
     <div class="row">
@@ -34,8 +41,8 @@
 				<li>
 					{% if p.date_published %}
 					<a href="{{ url_for('project', id=p.id, title=p.title) }}">
-						<span> {{ p.title }} </span> 
-						<span style="float:right;"> Published: {{ moment(p.date_published).format('L') }}  &nbsp;</span>
+						<div> {{ p.title }} </div> 
+						<div> Published: {{ moment(p.date_published).format('L') }}  &nbsp;</div>
 					</a>
 					{% else %}
 					<a href="{{ url_for('project', id=p.id, title=p.title) }}" style="width:75%; display:inline-flex;">
@@ -66,7 +73,7 @@
 				{% if library %}
 				{% for l in library %}
 				{% if current_user.is_authenticated and user == current_user %}
-				<li><a href="{{ url_for('project', id=l.id, title=l.title) }}"><span> {{ l.title }} </span> <span style="float:right;"> Published: {{ moment(l.date_published).format('L') }}</span></a></li>
+				<li><a href="{{ url_for('project', id=l.id, title=l.title) }}"><div> {{ l.title }} </div> <div> Published: {{ moment(l.date_published).format('L') }}</div></a></li>
 				{% else %}
 				<li><a href="{{ url_for('project_synopsis', id=l.id, title=l.title) }}"><span> {{ l.title }} </span> <span style="float:right;"> Published: {{ moment(l.date_published).format('L') }}</span></a></li>
 				<!--li role="presentation"><a href="#" data-toggle="modal" data-target="#library_modal_{{ l.id }}">{{ l.title }}</a></li-->
@@ -116,9 +123,15 @@
 			{{ form2.edit_title (class_='form-control', value=p.title) }}
 			{{ form2.edit_genre.label (class_='control-label') }}
 			{{ form2.edit_genre (class_='form-control', value=p.pg_name) }}
+			
 			<br>
 			{{ form2.edit_synopsis.label (class_='control-label') }}
-			<textarea class="form-control" name="edit_synopsis" cols="15" rows="20" maxlength="50000" required>{{p.synopsis}}</textarea>
+			<textarea class="form-control" name="edit_synopsis" cols="15" rows="8" maxlength="1000" required>{{p.synopsis}}</textarea>
+			<br>
+			{{ form2.edit_cover_pic.label (class_='control-label') }}
+			{{ form2.edit_cover_pic }}
+			{{ form2.edit_cover_pic_credit.label (class_='control-label') }}
+			{{ form2.edit_cover_pic_credit (class_='form-control', value=p.cover_pic_credit)  }}
 			<br>
 			{{ form2.edit_submit (class_="btn btn-default")}}
 			</form>

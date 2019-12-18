@@ -1,17 +1,19 @@
 from flask_wtf import FlaskForm
+from app import app, photos
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, HiddenField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, Regexp
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from app.models import User
 from flask_pagedown.fields import PageDownField
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Pen Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 	
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=15)])
+    username = StringField('Pen Name', validators=[DataRequired(), Length(min=4, max=45)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Regexp(regex=r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])', message="Password must be atleasst 8 characters long, must contain an uppercase letter, a number and a special character.")])
     password2 = PasswordField(
@@ -29,9 +31,10 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
 			
 class EditProfileForm(FlaskForm):
-	username = StringField('Username', validators=[DataRequired()])
+	username = StringField('Pen Name', validators=[DataRequired(), Length(min=4, max=45)])
 	about_me = TextAreaField('About me', validators=[Length(min=0, max=500)], render_kw={'maxlength': 500, "rows": 8, "cols": 10})
 	email = StringField('Email', validators=[DataRequired(), Email()])
+	profile_pic = FileField('Upload Profile Pic:', validators=[FileAllowed(photos)])
 	submit = SubmitField('Submit')
 
 	def __init__(self, original_username, original_email, *args, **kwargs):
@@ -63,25 +66,30 @@ class ResetPasswordForm(FlaskForm):
 	
 class CreateProjectForm(FlaskForm):
 	title = StringField('Title', validators=[DataRequired()])
-	genre = StringField('Genre', validators=[DataRequired()], render_kw={'placeholder': 'Separate each genre with a comma.'})
-	synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=50000)], render_kw={'maxlength': 50000 })
+	genre = StringField('Topics', validators=[DataRequired()], render_kw={'placeholder': 'Separate each topic with a comma.'})
+	synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000 })
+	cover_pic = FileField('Upload Cover Picture:', validators=[DataRequired(), FileAllowed(photos)])
+	cover_pic_credit = StringField('Picture credits ')
 	submit = SubmitField('Submit')
 	
 class EditProjectForm(FlaskForm):
 	proj_id = HiddenField('ID', validators=[DataRequired()])
 	edit_title = StringField('Title', validators=[DataRequired()])
-	edit_genre = StringField('Genre', validators=[DataRequired()])
-	edit_synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=50000)], render_kw={'maxlength': 50000, "rows": 20, "cols": 20})
+	edit_genre = StringField('Topics', validators=[DataRequired()])
+	edit_synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000 })
+	#edit_synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 5, "cols": 10})
+	edit_cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)])
+	edit_cover_pic_credit = StringField('Picture credits ')
 	edit_submit = SubmitField('Save')
 	
 class CreateChapterForm(FlaskForm):
-	chapter_number = IntegerField('Chapter Number', validators=[DataRequired()])
+	chapter_number = IntegerField('Chapter No:', validators=[DataRequired()])
 	chapter_title = StringField('Chapter title:', validators=[DataRequired()])
 	submit_chapter = SubmitField('Submit')
 	
 class EditChapterForm(FlaskForm):
 	chapter_id = HiddenField('Chapter id:', validators=[DataRequired()])
-	edit_chapter_number = IntegerField('Chapter Number', validators=[DataRequired()])
+	edit_chapter_number = IntegerField('Chapter No:', validators=[DataRequired()])
 	edit_chapter_title = StringField('Chapter title:', validators=[DataRequired()])
 	edit_body = PageDownField('Body', validators=[DataRequired()], render_kw={"rows": 20, "cols": 15})
 	save = SubmitField('Save')

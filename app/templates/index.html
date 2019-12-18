@@ -4,9 +4,11 @@
 {% block app_content %}
 <div class="container">
 	{% if projects %}
-	<h2>View published works.</h2>
+	<h2>Find something to read.</h2>
     {% for project in projects %}
-		{% include '_project.html' %}
+	<div class="col-md-10">
+		{% include 'project_.html' %}
+	</div>
     {% endfor %}
 	{% elif for_advice_projects %}
 	<h2>Give advice on unpublished works.</h2>
@@ -30,8 +32,74 @@
 {% block styles %}
 {{super()}}
 <style>
-	.table-bordered>tbody>tr>td {
+	/*.table-bordered>tbody>tr>td {
 	  border: 1px solid black;
+	}*/
+	.img_container {
+		position: relative;
+		max-width: 100%;
+		margin:0 auto;
+		padding: 20px;
+		border-radius: 10px;
+	}
+	.img_container .img_content {
+		position: absolute;
+		width: 80%;
+		bottom: 0;
+		/*margin: 0px auto;*/
+		margin-left: 8%;
+		margin-bottom: 20px;
+		padding: 20px;
+		background: rgb(0, 0, 0); /* Fallback color */
+		background: rgba(0, 0, 0, 0.3);
+		color: #f1f1f1;
+	}
+	.img_container .img_content img {
+			width:64px;
+			height:64px;
+			margin:10px;
+			display: inline;
+			border-radius: 5px;
+		}
+	.img_container .img_content .author-username {
+			font-size: 18px;
+			color:#f6f6f6;
+		}
+	
+	@media (max-width: 960px) {
+		.img_container .img_content {
+			max-height: 400px;
+			/*white-space: nowrap;*/
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-left: 5%;
+		}
+		.img_container .img_content div.project-introduction {
+			max-height: 100px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		
+		.img_container .img_content img {
+			width:32px;
+			height:32px;
+			margin:10px;
+		}
+		.img_container .img_content .author-username {
+			font-size: 14px;
+			color:#f6f6f6;
+		}
+		
+		/*.img_container .img_content .project-introduction {
+			padding: 3px; 
+			width: 130px; 
+			word-break: break-all; 
+			word-wrap: break-word;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 200px;
+		}*/
 	}
 </style>
 {% endblock %}
