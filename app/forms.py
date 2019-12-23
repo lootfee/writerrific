@@ -7,13 +7,14 @@ from app.models import User
 from flask_pagedown.fields import PageDownField
 
 class LoginForm(FlaskForm):
-    username = StringField('Pen Name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+	email = StringField('Email', validators=[DataRequired(), Email()])
+	#username = StringField('Name', validators=[DataRequired()])
+	password = PasswordField('Password', validators=[DataRequired()])
+	remember_me = BooleanField('Remember Me')
+	submit = SubmitField('Sign In')
 	
 class RegistrationForm(FlaskForm):
-    username = StringField('Pen Name', validators=[DataRequired(), Length(min=4, max=45)])
+    username = StringField('Name', validators=[DataRequired(), Length(min=4, max=45)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Regexp(regex=r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])', message="Password must be atleasst 8 characters long, must contain an uppercase letter, a number and a special character.")])
     password2 = PasswordField(
@@ -67,8 +68,9 @@ class ResetPasswordForm(FlaskForm):
 class CreateProjectForm(FlaskForm):
 	title = StringField('Title', validators=[DataRequired()])
 	genre = StringField('Topics', validators=[DataRequired()], render_kw={'placeholder': 'Separate each topic with a comma.'})
-	synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000 })
-	cover_pic = FileField('Upload Cover Picture:', validators=[DataRequired(), FileAllowed(photos)])
+	synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
+	cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
+	cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)])
 	cover_pic_credit = StringField('Picture credits ')
 	submit = SubmitField('Submit')
 	
@@ -76,9 +78,10 @@ class EditProjectForm(FlaskForm):
 	proj_id = HiddenField('ID', validators=[DataRequired()])
 	edit_title = StringField('Title', validators=[DataRequired()])
 	edit_genre = StringField('Topics', validators=[DataRequired()])
-	edit_synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000 })
+	edit_synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
 	#edit_synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 5, "cols": 10})
-	edit_cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)])
+	edit_cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
+	edit_cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)], render_kw={'placeholder': 'Upload a cover picture or paste a link below.'})
 	edit_cover_pic_credit = StringField('Picture credits ')
 	edit_submit = SubmitField('Save')
 	

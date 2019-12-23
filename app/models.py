@@ -148,6 +148,7 @@ class Project(db.Model):
 	chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
 	#ratings = db.relationship('Rating', backref='book', lazy='dynamic')
 	cover_pic = db.Column(db.String(1000))
+	cover_pic_link = db.Column(db.String(1000))
 	cover_pic_credit = db.Column(db.String(1000))
 	date_seek_review = db.Column(db.DateTime, index=True)
 	date_published = db.Column(db.DateTime, index=True)

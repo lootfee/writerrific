@@ -134,7 +134,11 @@
 			<div class="row" style="margin-bottom:50px;">
 				<div class="col-md-1"></div>
 				<div class="col-md-10 col-sm-12 col-xs-12">
+					{% if project.cover_pic %}
 					<img src="{{ project.cover_pic }}" style="height:400px;width:100%;">
+					{% else %}
+					<img src="{{ project.cover_pic_link }}" style="height:400px;width:100%;">
+					{% endif %}
 					<span class="text-center">{{ project.cover_pic_cred|safe }}</span>
 				</div>
 				<div class="col-md-1"></div>

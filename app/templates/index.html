@@ -4,10 +4,10 @@
 {% block app_content %}
 <div class="container">
 	{% if projects %}
-	<h2>Find something to read.</h2>
+	<h2 style="font-family: 'Merriweather', serif;">Find something to read or {% if current_user.is_authenticated %}<button class="btn btn-default" href="#" data-toggle="modal" data-target="#create_project_modal" style="font-size:18px;font-weight:bold;font-family: 'Merriweather', serif;color:#f50000;border-color:#ffebee;">Start writing !</button>{% else %}<a href="{{ url_for('login') }}"><button class="btn btn-default" style="font-size:18px;font-weight:bold;font-family: 'Merriweather', serif;border-color:#ffebee;">Start writing !</button></a>{% endif %}</h2>
     {% for project in projects %}
-	<div class="col-md-10">
-		{% include 'project_.html' %}
+	<div class="col-md-8">
+		{% include 'stories_.html' %}
 	</div>
     {% endfor %}
 	{% elif for_advice_projects %}
@@ -27,15 +27,60 @@
 	  </ul>
 	</nav>
 </div>
+<div class="modal fade" id="create_project_modal" tabindex="-1" role="dialog" aria-labelledby="create_project_modalLabel" style="font-family: 'Merriweather', serif; color:#f50000;">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{ wtf.quick_form(form) }}
+		  </div>
+		</div>
+	  </div>
+	</div>
 {% endblock %}
 
 {% block styles %}
 {{super()}}
 <style>
+	.btn-default:active:hover, .btn-default:active:focus{ 
+		background-color: #ffebee;
+		
+	   }
+	.btn-default:hover, .btn-default:focus { 
+		background-color: #ffebee;
+		
+	   }
+	.btn-default:active { 
+		background-color: #ffebee;
+		
+		}
+		
+	.form-container {
+		position: absolute;
+		margin-top: 25%;
+		width: 40%;
+		margin-left: 31%;
+		color: #f50000;
+	}
+	#submit {
+		color: #f50000;
+		font-size: large;
+		border-color : #f50000;
+	}
+	#register {
+		color: #f50000;
+		font-size: large;
+		border-color : #f50000;
+	}
+	.form-control {
+		border-color: #ffcdd2;
+	}
+</style>
+<!--style>
 	/*.table-bordered>tbody>tr>td {
 	  border: 1px solid black;
 	}*/
-	.img_container {
+	/*.img_container {
 		position: relative;
 		max-width: 100%;
 		margin:0 auto;
@@ -50,7 +95,7 @@
 		margin-left: 8%;
 		margin-bottom: 20px;
 		padding: 20px;
-		background: rgb(0, 0, 0); /* Fallback color */
+		background: rgb(0, 0, 0); /* Fallback color*/
 		background: rgba(0, 0, 0, 0.3);
 		color: #f1f1f1;
 	}
@@ -88,7 +133,7 @@
 		.img_container .img_content .author-username {
 			font-size: 14px;
 			color:#f6f6f6;
-		}
+		}*/
 		
 		/*.img_container .img_content .project-introduction {
 			padding: 3px; 
@@ -101,5 +146,23 @@
 			max-width: 200px;
 		}*/
 	}
-</style>
+</style-->
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script>
+$(document).ready(function() {
+	$("#login_form").css("display", "none");
+	$("#sign_in_").click(function() {
+		$("#login_form").css("display", "block");
+		$("#register_form").css("display", "none");
+	});
+	$("#register_").click(function() {
+		$("#login_form").css("display", "none");
+		$("#register_form").css("display", "block");
+	});
+});
+
+</script>
 {% endblock %}
