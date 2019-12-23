@@ -128,8 +128,10 @@
 			{{ form2.edit_synopsis.label (class_='control-label') }}
 			<textarea class="form-control" name="edit_synopsis" cols="15" rows="8" maxlength="1000" required>{{p.synopsis}}</textarea>
 			<br>
+			{{ form2.edit_cover_pic_link.label (class_='control-label') }}
+			{{ form2.edit_cover_pic_link (class_='form-control')}}
 			{{ form2.edit_cover_pic.label (class_='control-label') }}
-			{{ form2.edit_cover_pic }}
+			{{ form2.edit_cover_pic  }}
 			{{ form2.edit_cover_pic_credit.label (class_='control-label') }}
 			{{ form2.edit_cover_pic_credit (class_='form-control', value=p.cover_pic_credit)  }}
 			<br>
