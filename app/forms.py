@@ -81,7 +81,7 @@ class EditProjectForm(FlaskForm):
 	edit_synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
 	#edit_synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 5, "cols": 10})
 	edit_cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
-	edit_cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)], render_kw={'placeholder': 'Upload a cover picture or paste a link below.'})
+	edit_cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)])
 	edit_cover_pic_credit = StringField('Picture credits ')
 	edit_submit = SubmitField('Save')
 	

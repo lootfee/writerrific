@@ -224,18 +224,22 @@ def user(username):
 				else:
 					proj.genre.append(g_query)
 					db.session.commit()
-			return redirect(url_for('user', username=current_user.username))
+			return redirect(url_for('project', id=proj.id, title=proj.title))
 	elif form2.edit_submit.data:
 		if form2.validate_on_submit():
 			edit_proj = Project.query.filter_by(id=form2.proj_id.data).first()
 			edit_proj.title = form2.edit_title.data
 			edit_proj.synopsis = form2.edit_synopsis.data
+			print(form2.edit_cover_pic.data)
 			if form2.edit_cover_pic.data:
-				cover_pic_filename = photos.save(form2.edit_cover_pic.data)
-				edit_proj.cover_pic = photos.url(cover_pic_filename)
-			elif form.edit_cover_pic_link.data:
-				proj.cover_pic_link = form.edit_cover_pic_link.data
+				edit_cover_pic_filename = photos.save(form2.edit_cover_pic.data)
+				edit_proj.cover_pic = photos.url(edit_cover_pic_filename)
+				print(form2.edit_cover_pic.data)
+			elif form2.edit_cover_pic_link.data:
+				edit_proj.cover_pic_link = form2.edit_cover_pic_link.data
+				print('form2')
 			edit_proj.cover_pic_credit = form2.edit_cover_pic_credit.data
+			db.session.commit()
 			edit_genres = form2.edit_genre.data
 			edit_genre_list = edit_genres.split(',')
 			for g in edit_genre_list:
@@ -248,14 +252,16 @@ def user(username):
 				elif not edit_proj.is_genre(g_query):
 					edit_proj.genre.append(g_query)
 					db.session.commit()
-			#return redirect(url_for('user', username=current_user.username))
-			db.session.commit()
-			return redirect(url_for('user', username=current_user.username))
+			return redirect(url_for('project', id=edit_proj.id, title=edit_proj.title))
 	'''elif request.method == 'GET':
 		for p in portfolio:
 			form2.proj_id.data = p.id
 			form2.edit_title.data = p.title
-			form2.edit_genre.data = p.genre
+			pg_list = []
+			for pg in p.genre:
+				pg_list.append(pg.name)
+			p.pg_name = ','.join(pg_list)
+			form2.edit_genre.data = p.pg_name
 			form2.edit_synopsis.data = p.synopsis'''
 	return render_template('user.html', user=user, title='User', description=user.about_me, form=form, form2=form2, portfolio=portfolio, library=library, register_form=register_form, login_form=login_form)
 	
