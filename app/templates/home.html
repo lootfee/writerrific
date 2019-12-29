@@ -101,6 +101,20 @@ $(document).ready(function() {
 		$("#register_form").css("display", "block");
 	});
 });
+$(window).on('load',function(){
+	if ($("#register_form").has("div.has-error").length !== 0){
+		$('#register_modal').modal('show');
+		$("#login_form").css("display", "none");
+		$("#register_form").css("display", "block");
+	}
+	
+	else if ($("#login_form").has("div.has-error").length !== 0){
+		$('#register_modal').modal('show');
+		$("#login_form").css("display", "block");
+		$("#register_form").css("display", "none");
+	}
+   
+});
 
 </script>
 {% endblock %}

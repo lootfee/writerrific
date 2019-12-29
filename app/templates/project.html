@@ -9,7 +9,7 @@
 				
 				{% if chapters %}
 				{% for c in chapters %}
-				<li><a href="#{{ c.chapter_title }}_anchor">{{ c.chapter_no }}</a></li>
+				<li><a href="#{{ c.chapter_title }}_anchor">{{ c.chapter_no|safe }}</a></li>
 				{% endfor %}
 				{% endif %}
 				{% if current_user.is_authenticated %}
@@ -63,7 +63,7 @@
 				<ul class="list-group" style="list-style-type:none; font-size: 14px;">
 				{% if chapters %}
 				{% for c in chapters %}
-					<li><span class="col-md-10 sidenav_list" title="{{ c.chapter_title }}"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
+					<li><span class="col-md-10 sidenav_list" title="{{ c.chapter_title|safe }}"><a href="#{{ c.chapter_title }}_anchor" rel="internal">{{ c.chapter_title|safe }}</a></span>{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}{% if project.date_published is none %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}{% endif %}</li>
 				{% endfor %}
 				{% endif %}
 				<li></li>
@@ -144,7 +144,7 @@
 				<div class="col-md-1"></div>
 			</div>
 			
-			<div class="row" style="font-family: serif;font-size: 20px;">
+			<div class="row" id="project_content" style="font-family: serif;font-size: 20px;">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<ul class="list-group">
@@ -153,10 +153,10 @@
 						<!--to make href="#id" of section not on top of page-->
 						<span class="anchor" id="{{ c.chapter_title }}_anchor"></span>
 						<section >
-							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title }}</h2><span id="chapter_edit_mobile">{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}</span></header>
+							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title|safe }}</h2><span id="chapter_edit_mobile">{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}</span></header>
 								<article>
-									{% if c.body %}
-										{{ c.body|safe }}
+									{% if c.chapter_body %}
+										{{ c.chapter_body|safe }}
 									{% endif %}
 								</article>
 							</li>
@@ -245,8 +245,14 @@
   <meta property="og:url"           content="{{url_for('project', id=project.id, title=project.title )}}" />
   <meta property="og:type"          content="website" />
   <meta property="og:title"         content="{{ project.title }}" />
-  <meta property="og:description"   content="project.synopsis" />
-  <!--meta property="og:image"         content="https://www.your-domain.com/path/image.jpg" /-->
+  <meta property="og:description"   content="{{project.synopsis}}" />
+  {% if project.cover_pic %}
+  <meta property="og:image"         content="project.cover_pic">
+  {% else %}
+  <meta property="og:image"         content="project.cover_pic_link">
+  {% endif %}
+  <!--------------------------------------------------------------------------->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
 	.modal-dialog,
 	.medium-modal {
@@ -345,12 +351,27 @@
 			width: 90vw;
 		}
 	}
+	
+	/* Set content font-families */
+	.ql-font-merriweather {
+	font-family: 'Merriweather', serif;
+	}
+	.ql-font-roboto {
+	font-family: "Roboto";
+	}
+	.ql-font-montserrat {
+	font-family: 'Montserrat', sans-serif;
+	}
 </style>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+	//var quill = new Quill('#project_content');
+</script>
 <!--script>
 $(document).ready(function() {
 	$(".sidenav_list a span").each(function() {

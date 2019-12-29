@@ -5,36 +5,114 @@
 <div class="container" style="margin-bottom: 50px;">
 <div class="col-md-2"></div>
 <div class="col-md-8">
+	<div class="col-md-2">
+		<label class="control-label" for="div_chapter_number">Chapter No:</label>
+		<input class="form-control" id="div_chapter_number" value="{{chapter.chapter_no}}">
+	</div>
+	<div class="col-md-10">
+		<label class="control-label" for="div_chapter_title">Chapter title:</label>
+		<input id="div_chapter_title" class="form-control" value="{{chapter.chapter_title}}">
+	</div>
+	<br>
+	<div class="col-md-12 writerrific_toolbar" style="border: 1px solid #ccc;border-radius: 4px; padding-top: 5px; padding-bottom: 5px; margin-top:10px;margin-bottom:10px;">
+		<select id="font_selector" title="Font family">
+			<option value="Amatic SC, cursive" style="font-family: 'Amatic SC', cursive;">Amatic SC</option>
+			<option value="Anton, sans-serif" style="font-family: 'Anton', sans-serif;">Anton</option>
+			<option value="Bitter, serif" style="font-family: 'Bitter', serif;">Bitter</option>
+			<option value="Crimson Text, serif" style="font-family: 'Crimson Text', serif;">Crimson Text</option>
+			<option value="Dancing Script, cursive" style="font-family: 'Dancing Script', cursive;">Dancing Script</option>
+			<option value="Indie Flower, cursive" style="font-family: 'Indie Flower', cursive;">Indie Flower</option>
+			<option value="Lato, sans-serif" style="font-family: 'Lato', sans-serif;">Lato</option>
+			<option value="Libre Baskerville, serif" style="font-family: 'Libre Baskerville', serif;">Libre Baskerville</option>
+			<option value="Lobster, cursive" style="font-family: 'Lobster', cursive;">Lobster</option>
+			<option value="Lora, serif" style="font-family: 'Lora', serif;">Lora</option>
+			<option value="Merriweather, serif" style="font-family: 'Merriweather', serif;">Merriweather</option>
+			<option value="Montserrat, sans-serif" style="font-family:  'Montserrat', sans-serif;">Montserrat</option>
+			<option value="Nanum Gothic, sans-serif" style="font-family: 'Nanum Gothic', sans-serif;">Nanum Gothic</option>
+			<option value="Noto Serif, serif" style="font-family: 'Noto Serif', serif;">Noto Serif</option>
+			<option value="Nunito, sans-serif" style="font-family: 'Nunito', sans-serif;">Nunito</option>
+			<option value="Open Sans, sans-serif" style="font-family: 'Open Sans', sans-serif;">Open Sans</option>
+			<option value="Oswald, sans-serif" style="font-family: 'Oswald', sans-serif;">Oswald</option>
+			<option value="Pacifico, cursive" style="font-family: 'Pacifico', cursive;">Pacifico</option>
+			<option value="Playfair Display, serif" style="font-family: 'Playfair Display', serif;">Playfair Display</option>
+			<option value="Quicksand, sans-serif" style="font-family:  'Quicksand', sans-serif;">Quicksand</option>
+			<option value="Raleway, sans-serif" style="font-family:  'Raleway', sans-serif;">Raleway</option>
+			<option value="Roboto, sans-serif" style="font-family: 'Roboto', sans-serif;" selected>Roboto</option>
+			<option value="Rubik, sans-serif" style="font-family: 'Rubik', sans-serif;">Rubik</option>
+			<option value="Teko, sans-serif" style="font-family: 'Teko', sans-serif;">Teko</option>
+			<option value="Titillium Web, sans-serif" style="font-family: 'Titillium Web', sans-serif;">Titillium Web</option>
+			<option value="Ubuntu, sans-serif" style="font-family: 'Ubuntu', sans-serif;">Ubuntu</option>
+			<option value="Varela Round, sans-serif" style="font-family: 'Varela Round', sans-serif;">Varela Round</option>
+			<option value="Yanone Kaffeesatz, sans-serif" style="font-family: 'Yanone Kaffeesatz', sans-serif;">Yanone Kaffeesatz</option>
+		</select>
+		<select id="select_font_size" title="Font size">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+		</select>
+		<button class="wt-button" onclick="document.execCommand('bold', false, '');"><span title="Bold" aria-hidden="true"><b>B</b></span></button>
+		<button class="wt-button" onclick="document.execCommand('italic', false, '');"><span title="Italic" aria-hidden="true"><i>I</i></span></button>
+		<button class="wt-button" onclick="document.execCommand('underline', false, '');"><span title="Underline" aria-hidden="true"><u>U</u></span></button>
+		<select id="heading_select" title="Heading size">
+			<option value="h1">H1</option>
+			<option value="h2">H2</option>
+			<option value="h3">H3</option>
+		</select>
+		<!--button class="wt-button wt-button-bold" onclick="document.execCommand('formatBlock', false, '<h1>');"><span title="Heading 1" aria-hidden="true"><b>H1</b></span></button>
+		<button class="wt-button wt-button-bold" onclick="document.execCommand('formatBlock', false, '<h2>');"><span title="Heading 2" aria-hidden="true"><b>H2</b></span></button>
+		<button class="wt-button wt-button-bold" onclick="document.execCommand('formatBlock', false, '<h3>');"><span title="Heading 3" aria-hidden="true"><b>H3</b></span></button>
+		<button class="wt-button wt-button-bold" onclick="document.execCommand('formatBlock', false, '<div>');"><span title="Normal text" aria-hidden="true"><b>N</b></span></button-->
+		<button class="wt-button" onclick="document.execCommand('subscript', false, '');"><span title="Subscript" aria-hidden="true">X<sub>y</sub></span></button>
+		<button class="wt-button" onclick="document.execCommand('superscript', false, '');"><span title="Superscript" aria-hidden="true">X<sup>y</sup></span></button>
+		<button class="wt-button" id="url_link" ><span class="glyphicon glyphicon-link" title="URL Link" aria-hidden="true"></span></button>
+		<button class="wt-button" id="image_link"><span class="glyphicon glyphicon-picture" title="Image Link" aria-hidden="true"></span></button>
+		<!--input class="wt-button" type="file" accept="image/*" id="file" style="display: none;" onchange="getImage()"><span class="glyphicon glyphicon-picture" title="Image" aria-hidden="true"></span></button-->
+		<button class="wt-button" onclick="document.execCommand('justifyLeft', false, '');"><span class="glyphicon glyphicon-align-left" title="Align left" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('justifyCenter', false, '');"><span class="glyphicon glyphicon-align-center" title="Align center" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('justifyRight', false, '');"><span class="glyphicon glyphicon-align-right" title="Align right" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('justifyFull', false, '');"><span class="glyphicon glyphicon-align-justify" title="Justify full" aria-hidden="true"></span></button>
+		<!--button class="wt-button" onclick="document.execCommand('indent', false, '');"><span class="glyphicon glyphicon-indent-left" title="Indent left" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('outdent', false, '');"><span class="glyphicon glyphicon-indent-right" title="Indent right" aria-hidden="true"></span></button-->
+		<button class="wt-button" onclick="document.execCommand('insertUnorderedList', false, '');"><span class="glyphicon glyphicon-list" title="Unordered list" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('insertOrderedList', false, '');"><span class="glyphicon glyphicon-sort-by-order" title="Numbered list" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('undo', false, '');"><span class="glyphicon glyphicon-chevron-left" title="Undo" aria-hidden="true"></span></button>
+		<button class="wt-button" onclick="document.execCommand('redo', false, '');"><span class="glyphicon glyphicon-chevron-right" title="Redo" aria-hidden="true"></span></button>
+	</div>
+	<div class="col-md-12" id="writerrific_editor" style="border: 1px solid #ccc;border-radius: 4px; padding-top: 20px; padding-bottom: 20px; min-height:100px;font-family: 'Roboto', sans-serif; " contenteditable>
+		{% if chapter.chapter_body %}
+		{{ chapter.chapter_body|safe }}
+		{% else %}
+		<p>Write something terrific!</p>
+		{% endif %}
+		
+	</div>
+	
 	<form action method="post" class="form" role="form">
 		{{form.csrf_token() }}
-		<div class="row">
+		<div class="row" style="display:none;">
 			{{ form.chapter_id (value=chapter.id)}}
-			<div class="col-md-2">
-			{{ form.edit_chapter_number.label (class_='control-label') }}
-			{{ form.edit_chapter_number (class_='form-control', value=chapter.chapter_no) }}
+			<div class="col-md-2" >
+			
+			{{ form.edit_chapter_number  }}
 			</div>
-			<div class="col-md-10">
-			{{ form.edit_chapter_title.label (class_='control-label') }}
-			{{ form.edit_chapter_title (class_='form-control', value=chapter.chapter_title) }}
+			<div class="col-md-10" >
+			
+			{{ form.edit_chapter_title }}
 			</div>			
 		</div>
 		<br>
-		<div class="row">
-			<div class="col-md-12">
-				{{ form.edit_body.label (class_='control-label') }}
-				{{ form.edit_body(only_preview=True) }}
-			</div>
+		<div class="row" style="display:none;">
+			{{ form.edit_body }}
+			<!--input id="edit_body" name="edit_body" hidden-->
 		</div>
-		<div class="row" >
-			<div class="col-md-1 col-sm-1 col-xs-1"></div>
-			<div class="col-md-11 col-sm-11 col-xs-11">
-				<textarea class="flask-pagedown-input" cols="100" rows="18" id="flask-pagedown-edit_body" name="edit_body" required>{{chapter.chapter_body}}</textarea>
-			</div>
-			<div class="col-md-1 col-sm-1 col-xs-1"></div>
-		</div>
+			
 		<div class="col-md-12">
 		<br>
-		{{ form.save (class_="btn btn-default") }}
+		{{ form.save_chapter (class_="btn btn-default") }}
+		
 		</div>	
 	</form>	
 </div>
@@ -45,6 +123,7 @@
 
 {% block styles %}
 {{ super() }}
+ <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
 img {
 	display: block;
@@ -58,10 +137,193 @@ img {
 		height: 300px;
 	  }
 	}
+	
+/* -----------------------------------------------------------------------------------*/
+/*   for quilljs     */
+
+.ql-snow .ql-picker.ql-font {
+    width: 150px;
+}  
+#editor-container {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  height: 375px;
+}
+
+/* Set dropdown font-families */
+/*#toolbar-container .ql-font span[data-label="Montserrat"]::before {
+  font-family: 'Montserrat', sans-serif;
+}
+#toolbar-container .ql-font span[data-label="Merriweather"]::before {
+  font-family: 'Merriweather', serif;
+}
+#toolbar-container .ql-font span[data-label="Roboto"]::before {
+  font-family: 'Roboto', sans-serif;
+}*/
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='montserrat']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='montserrat']::before
+{
+  content: 'Montserrat';
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='merriweather']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='merriweather']::before
+{
+  content: 'Merriweather';
+  font-family: 'Merriweather', serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='roboto']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='roboto']::before
+{
+  content: 'Roboto';
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Set content font-families */
+.ql-font-merriweather {
+   font-family: 'Merriweather', serif;
+}
+.ql-font-roboto {
+  font-family: "Roboto";
+}
+.ql-font-montserrat {
+   font-family: 'Montserrat', sans-serif;
+}
+/* We do not set Aref Ruqaa since it is the default font */
+
+
+/* ----------------------------------------------------------------------------------------------*/
+
+#writerrific_editor img {
+	width: 80%;
+}
+
+.wt-button {
+	border-radius: 5px;
+    border-style: none;
+    color: black;
+    background-color: #ffffff00;
+    margin: 2px;
+	font-size: 16px;
+}
 </style>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+/*function link() {
+  var url = prompt("Enter link URL");
+  document.execCommand("createLink", false, url);
+}
+function image_link() {
+  var url = prompt("Enter image URL");
+  document.execCommand("insertimage", false, url);
+}
+function fontEditor(fontName) {
+    document.execCommand("fontName", false, fontName);
+}
+function get_content(){
+	var c = chapter_html.innerHTML;
+	edit_body.value = c;
+}
+var chapter_html = document.querySelector("#writerrific_editor");
+var edit_title = document.querySelector("#chapter_title");
+var edit_body = document.querySelector("#edit_body");*/
+$("#url_link").click(function() {
+	var url = prompt("Enter link URL");
+	document.execCommand("createLink", false, url);
+});
+$("#image_link").click(function() {
+	var url = prompt("Enter image URL");
+  document.execCommand("insertimage", false, url);
+});
+$("#font_selector").change(function() {
+	var font_name = $(this).children("option:selected").val();
+	document.execCommand("fontName", false, font_name);
+});
+$("#select_font_size").change(function() {
+	var font_size = $(this).children("option:selected").val();
+	document.execCommand("fontSize", false, font_size);
+	console.log(font_size)
+});
+$("#heading_select").change(function() {
+	var heading_size = $(this).children("option:selected").val();
+	document.execCommand("formatBlock", false, heading_size);
+	console.log(heading_size)
+});
+
+
+$("#save_chapter").click(function() {
+	var edit_c_number = $("#div_chapter_number").val();
+	var edit_c_title = $("#div_chapter_title").val();
+	var edit_c_body = $("#writerrific_editor").html();
+	$("#edit_chapter_number").val(edit_c_number);
+	$("#edit_chapter_title").val(edit_c_title);
+	$("#edit_body").val(edit_c_body);
+});
+</script>
+<!--script>
+	// Add fonts to whitelist
+	var Font = Quill.import('formats/font');
+	// We do not add Aref Ruqaa since it is the default
+	Font.whitelist = ['merriweather', 'roboto', 'montserrat'];
+	Quill.register(Font, true);
+	
+	var toolbarOptions = [
+		  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+		  ['blockquote', 'code-block'],
+
+		  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+		  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+		  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+		  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+		  [{ 'direction': 'rtl' }],                         // text direction
+
+		  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+		  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+		  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+		  [{ 'font': ['montserrat', 'merriweather', 'roboto'] }],
+		  [{ 'align': [] }],
+
+		  ['clean']                                         // remove formatting button
+		];
+	  var quill = new Quill('#quill_editor', {
+		modules: {
+			toolbar: toolbarOptions
+		  },
+		theme: 'snow'
+	  });
+	  
+		var form = document.querySelector('form');
+		form.onsubmit = function() {
+		// Populate hidden form on submit
+		var body = document.querySelector('input[name=edit_body]');
+		body.value = JSON.stringify(quill.getContents());//quill.root.innerHTML;
+
+		//console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+	  }
+	 $(document).ready(function() {
+		$( "#toolbar-container" ).append( $("select.ql-font") );
+		var merriweather = new Option("Merriweather", "merriweather");
+		var roboto = new Option("Roboto", "roboto");
+		var montserrat = new Option("Montserrat", "montserrat");
+		/// jquerify the DOM object 'o' so we can use the html method
+		$(merriweather).html("Merriweather");
+		$(roboto).html("Roboto");
+		$(montserrat).html("Montserrat");
+		$("#selectList").append(merriweather, roboto, montserrat);
+		//$("#quill_editor").attr('name', 'edit_body');
+		var body = JSON.stringify("{{chapter.chapter_body}}");
+		$(".ql-editor").html(body)
+		
+	 });
+	
+</script-->
 {% endblock %}

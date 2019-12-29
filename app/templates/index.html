@@ -27,16 +27,18 @@
 	  </ul>
 	</nav>
 </div>
+{% if current_user.is_authenticated %}
 <div class="modal fade" id="create_project_modal" tabindex="-1" role="dialog" aria-labelledby="create_project_modalLabel" style="font-family: 'Merriweather', serif; color:#f50000;">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content">
-		  <div class="modal-body">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			{{ wtf.quick_form(form) }}
-		  </div>
-		</div>
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-body">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		{{ wtf.quick_form(form) }}
 	  </div>
 	</div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block styles %}

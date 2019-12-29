@@ -7,19 +7,19 @@ from app.models import User
 from flask_pagedown.fields import PageDownField
 
 class LoginForm(FlaskForm):
-	email = StringField('Email', validators=[DataRequired(), Email()])
+	login_email = StringField('Email', validators=[DataRequired(), Email()])
 	#username = StringField('Name', validators=[DataRequired()])
-	password = PasswordField('Password', validators=[DataRequired()])
+	login_password = PasswordField('Password', validators=[DataRequired()])
 	remember_me = BooleanField('Remember Me')
-	submit = SubmitField('Sign In')
+	login_submit = SubmitField('Sign In')
 	
 class RegistrationForm(FlaskForm):
-    username = StringField('Name', validators=[DataRequired(), Length(min=4, max=45)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Regexp(regex=r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])', message="Password must be atleasst 8 characters long, must contain an uppercase letter, a number and a special character.")])
-    password2 = PasswordField(
+    register_username = StringField('Name', validators=[DataRequired(), Length(min=4, max=45)])
+    register_email = StringField('Email', validators=[DataRequired(), Email()])
+    register_password = PasswordField('Password', validators=[DataRequired(), Regexp(regex=r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])', message="Password must be at least 8 characters long, must contain an uppercase letter, a number and a special character.")])
+    register_password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+    register_submit = SubmitField('Register')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
@@ -94,8 +94,9 @@ class EditChapterForm(FlaskForm):
 	chapter_id = HiddenField('Chapter id:', validators=[DataRequired()])
 	edit_chapter_number = IntegerField('Chapter No:', validators=[DataRequired()])
 	edit_chapter_title = StringField('Chapter title:', validators=[DataRequired()])
-	edit_body = PageDownField('Body', validators=[DataRequired()], render_kw={"rows": 20, "cols": 15})
-	save = SubmitField('Save')
+	#edit_body = PageDownField('Body', validators=[DataRequired()], render_kw={"rows": 20, "cols": 15})
+	edit_body = StringField('Body', validators=[DataRequired()])
+	save_chapter = SubmitField('Save')
 
 class PublishForm(FlaskForm):
 	publish_project = SubmitField('Publish Project')

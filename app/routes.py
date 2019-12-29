@@ -20,20 +20,22 @@ def before_request():
 def home():
 	register_form = RegistrationForm()
 	login_form = LoginForm()
-	if login_form.validate_on_submit():
-		user = User.query.filter_by(email=login_form.email.data).first()
-		if user is None or not user.check_password(login_form.password.data):
-			flash('Invalid email or password')
-			return redirect(url_for('home'))
-		login_user(user, remember=login_form.remember_me.data)
-		return redirect(url_for('index'))
-	if register_form.validate_on_submit():
-		user = User(username=register_form.username.data, email=register_form.email.data)
-		user.set_password(register_form.password.data)
-		db.session.add(user)
-		db.session.commit()
-		flash('Thank you for registering')
-		return redirect(url_for('index'))
+	if login_form.login_submit.data:
+		if login_form.validate_on_submit():
+			user = User.query.filter_by(email=login_form.login_email.data).first()
+			if user is None or not user.check_password(login_form.login_password.data):
+				flash('Invalid email or password')
+				return redirect(url_for('home'))
+			login_user(user, remember=login_form.remember_me.data)
+			return redirect(url_for('index'))
+	elif register_form.register_submit.data:
+		if register_form.validate_on_submit():
+			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
+			user.set_password(register_form.register_password.data)
+			db.session.add(user)
+			db.session.commit()
+			flash('Thank you for registering')
+			return redirect(url_for('index'))
 	return render_template('home.html', title='Home', register_form=register_form, login_form=login_form)
 
 
@@ -41,20 +43,22 @@ def home():
 def index():
 	register_form = RegistrationForm()
 	login_form = LoginForm()
-	if login_form.validate_on_submit():
-		user = User.query.filter_by(email=login_form.email.data).first()
-		if user is None or not user.check_password(login_form.password.data):
-			flash('Invalid email or password')
-			return redirect(url_for('home'))
-		login_user(user, remember=login_form.remember_me.data)
-		return redirect(url_for('index'))
-	if register_form.validate_on_submit():
-		user = User(username=register_form.username.data, email=register_form.email.data)
-		user.set_password(register_form.password.data)
-		db.session.add(user)
-		db.session.commit()
-		flash('Thank you for registering')
-		return redirect(url_for('index'))
+	if login_form.login_submit.data:
+		if login_form.validate_on_submit():
+			user = User.query.filter_by(email=login_form.login_email.data).first()
+			if user is None or not user.check_password(login_form.login_password.data):
+				flash('Invalid email or password')
+				return redirect(url_for('home'))
+			login_user(user, remember=login_form.remember_me.data)
+			return redirect(url_for('index'))
+	elif register_form.register_submit.data:
+		if register_form.validate_on_submit():
+			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
+			user.set_password(register_form.register_password.data)
+			db.session.add(user)
+			db.session.commit()
+			flash('Thank you for registering')
+			return redirect(url_for('index'))
 	form = CreateProjectForm()
 	if form.validate_on_submit():
 		genres = form.genre.data
@@ -105,8 +109,8 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
+        user = User.query.filter_by(email=form.login_email.data).first()
+        if user is None or not user.check_password(form.login_password.data):
             flash('Invalid email or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
@@ -122,40 +126,44 @@ def logout():
 def privacy_policy():
 	register_form = RegistrationForm()
 	login_form = LoginForm()
-	if login_form.validate_on_submit():
-		user = User.query.filter_by(email=login_form.email.data).first()
-		if user is None or not user.check_password(login_form.password.data):
-			flash('Invalid email or password')
-			return redirect(url_for('home'))
-		login_user(user, remember=login_form.remember_me.data)
-		return redirect(url_for('index'))
-	if register_form.validate_on_submit():
-		user = User(username=register_form.username.data, email=register_form.email.data)
-		user.set_password(register_form.password.data)
-		db.session.add(user)
-		db.session.commit()
-		flash('Thank you for registering')
-		return redirect(url_for('index'))
+	if login_form.login_submit.data:
+		if login_form.validate_on_submit():
+			user = User.query.filter_by(email=login_form.login_email.data).first()
+			if user is None or not user.check_password(login_form.login_password.data):
+				flash('Invalid email or password')
+				return redirect(url_for('home'))
+			login_user(user, remember=login_form.remember_me.data)
+			return redirect(url_for('index'))
+	elif register_form.register_submit.data:
+		if register_form.validate_on_submit():
+			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
+			user.set_password(register_form.register_password.data)
+			db.session.add(user)
+			db.session.commit()
+			flash('Thank you for registering')
+			return redirect(url_for('index'))
 	return render_template('privacy_policy.html', title='Privacy Policy', register_form=register_form, login_form=login_form)
 	
 @app.route('/terms_of_service')
 def terms_of_service():
 	register_form = RegistrationForm()
 	login_form = LoginForm()
-	if login_form.validate_on_submit():
-		user = User.query.filter_by(email=login_form.email.data).first()
-		if user is None or not user.check_password(login_form.password.data):
-			flash('Invalid email or password')
-			return redirect(url_for('home'))
-		login_user(user, remember=login_form.remember_me.data)
-		return redirect(url_for('index'))
-	if register_form.validate_on_submit():
-		user = User(username=register_form.username.data, email=register_form.email.data)
-		user.set_password(register_form.password.data)
-		db.session.add(user)
-		db.session.commit()
-		flash('Thank you for registering')
-		return redirect(url_for('index'))
+	if login_form.login_submit.data:
+		if login_form.validate_on_submit():
+			user = User.query.filter_by(email=login_form.login_email.data).first()
+			if user is None or not user.check_password(login_form.login_password.data):
+				flash('Invalid email or password')
+				return redirect(url_for('home'))
+			login_user(user, remember=login_form.remember_me.data)
+			return redirect(url_for('index'))
+	elif register_form.register_submit.data:
+		if register_form.validate_on_submit():
+			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
+			user.set_password(register_form.register_password.data)
+			db.session.add(user)
+			db.session.commit()
+			flash('Thank you for registering')
+			return redirect(url_for('index'))
 	return render_template('terms_of_service.html', title='Terms of Service', register_form=register_form, login_form=login_form)
 	
 @app.route('/register', methods=['GET', 'POST'])
@@ -164,8 +172,8 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
+        user = User(username=form.register_username.data, email=form.register_email.data)
+        user.set_password(form.register_password.data)
         db.session.add(user)
         db.session.commit()
         flash('Thank you for registering')
@@ -176,20 +184,22 @@ def register():
 def user(username):
 	register_form = RegistrationForm()
 	login_form = LoginForm()
-	if login_form.validate_on_submit():
-		login_user = User.query.filter_by(email=login_form.email.data).first()
-		if login_user is None or not login_user.check_password(login_form.password.data):
-			flash('Invalid email or password')
-			return redirect(url_for('home'))
-		login_user(login_user, remember=login_form.remember_me.data)
-		return redirect(url_for('index'))
-	if register_form.validate_on_submit():
-		register_user = User(username=register_form.username.data, email=register_form.email.data)
-		register_user.set_password(register_form.password.data)
-		db.session.add(register_user)
-		db.session.commit()
-		flash('Thank you for registering')
-		return redirect(url_for('index'))
+	if login_form.login_submit.data:
+		if login_form.validate_on_submit():
+			login_user = User.query.filter_by(email=login_form.login_email.data).first()
+			if login_user is None or not login_user.check_password(login_form.login_password.data):
+				flash('Invalid email or password')
+				return redirect(url_for('home'))
+			login_user(login_user, remember=login_form.remember_me.data)
+			return redirect(url_for('index'))
+	elif register_form.register_submit.data:
+		if register_form.validate_on_submit():
+			register_user = User(username=register_form.register_username.data, email=register_form.register_email.data)
+			register_user.set_password(register_form.register_password.data)
+			db.session.add(register_user)
+			db.session.commit()
+			flash('Thank you for registering')
+			return redirect(url_for('index'))
 	user = User.query.filter_by(username=username).first_or_404()
 	portfolio = Project.query.filter_by(user_id=user.id, date_quarantined=None).order_by(Project.date_published.desc()).all()
 	for p in portfolio:
@@ -348,20 +358,22 @@ def reset_password(token):
 def project(id, title):
 	register_form = RegistrationForm()
 	login_form = LoginForm()
-	if login_form.validate_on_submit():
-		login_user = User.query.filter_by(email=login_form.email.data).first()
-		if login_user is None or not login_user.check_password(login_form.password.data):
-			flash('Invalid email or password')
-			return redirect(url_for('home'))
-		login_user(login_user, remember=login_form.remember_me.data)
-		return redirect(url_for('index'))
-	if register_form.validate_on_submit():
-		register_user = User(username=register_form.username.data, email=register_form.email.data)
-		register_user.set_password(register_form.password.data)
-		db.session.add(register_user)
-		db.session.commit()
-		flash('Thank you for registering')
-		return redirect(url_for('index'))
+	if login_form.login_submit.data:
+		if login_form.validate_on_submit():
+			login_user = User.query.filter_by(email=login_form.login_email.data).first()
+			if login_user is None or not login_user.check_password(login_form.login_password.data):
+				flash('Invalid email or password')
+				return redirect(url_for('home'))
+			login_user(login_user, remember=login_form.remember_me.data)
+			return redirect(url_for('index'))
+	elif register_form.register_submit.data:
+		if register_form.validate_on_submit():
+			register_user = User(username=register_form.register_username.data, email=register_form.register_email.data)
+			register_user.set_password(register_form.register_password.data)
+			db.session.add(register_user)
+			db.session.commit()
+			flash('Thank you for registering')
+			return redirect(url_for('index'))
 	project = Project.query.filter_by(id=id).first()
 	if project.cover_pic_credit:
 		project.cover_pic_cred = markdown2.markdown(project.cover_pic_credit)
@@ -490,12 +502,15 @@ def chapter(id):
 			if project.author is not current_user:
 				return redirect(url_for('index'))'''
 	form = EditChapterForm()
-	if form.validate_on_submit():
-		chapter.chapter_no = form.edit_chapter_number.data
-		chapter.chapter_title = form.edit_chapter_title.data
-		chapter.chapter_body = form.edit_body.data
-		db.session.commit()
-		return redirect(url_for('project', id=project.id, title=project.title))
+	if form.save_chapter.data:
+		print(form.edit_body.data)
+		if form.validate_on_submit():
+			print(form.edit_body.data)
+			chapter.chapter_no = form.edit_chapter_number.data
+			chapter.chapter_title = form.edit_chapter_title.data
+			chapter.chapter_body = form.edit_body.data
+			db.session.commit()
+			return redirect(url_for('project', id=project.id, title=project.title))
 	return render_template('chapter.html', chapter=chapter, project=project, form=form)
 	
 @app.route('/delete_chapter/<int:id>', methods=['GET', 'POST'])
