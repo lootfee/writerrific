@@ -60,6 +60,7 @@
 			<option value="h1">H1</option>
 			<option value="h2">H2</option>
 			<option value="h3">H3</option>
+			<option value="div">Normal</option>
 		</select>
 		<!--button class="wt-button wt-button-bold" onclick="document.execCommand('formatBlock', false, '<h1>');"><span title="Heading 1" aria-hidden="true"><b>H1</b></span></button>
 		<button class="wt-button wt-button-bold" onclick="document.execCommand('formatBlock', false, '<h2>');"><span title="Heading 2" aria-hidden="true"><b>H2</b></span></button>
@@ -69,7 +70,8 @@
 		<button class="wt-button" onclick="document.execCommand('superscript', false, '');"><span title="Superscript" aria-hidden="true">X<sup>y</sup></span></button>
 		<button class="wt-button" id="url_link" ><span class="glyphicon glyphicon-link" title="URL Link" aria-hidden="true"></span></button>
 		<button class="wt-button" id="image_link"><span class="glyphicon glyphicon-picture" title="Image Link" aria-hidden="true"></span></button>
-		<!--input class="wt-button" type="file" accept="image/*" id="file" style="display: none;" onchange="getImage()"><span class="glyphicon glyphicon-picture" title="Image" aria-hidden="true"></span></button-->
+		<!--label for="get_image" style="cursor: pointer;"><span class="glyphicon glyphicon-picture" title="Image" aria-hidden="true" ></span></label>
+		<input type="file" accept="image/*" id="get_image" style="display: none;" -->
 		<button class="wt-button" onclick="document.execCommand('justifyLeft', false, '');"><span class="glyphicon glyphicon-align-left" title="Align left" aria-hidden="true"></span></button>
 		<button class="wt-button" onclick="document.execCommand('justifyCenter', false, '');"><span class="glyphicon glyphicon-align-center" title="Align center" aria-hidden="true"></span></button>
 		<button class="wt-button" onclick="document.execCommand('justifyRight', false, '');"><span class="glyphicon glyphicon-align-right" title="Align right" aria-hidden="true"></span></button>
@@ -243,6 +245,23 @@ $("#image_link").click(function() {
 	var url = prompt("Enter image URL");
   document.execCommand("insertimage", false, url);
 });
+// not working
+$("#get_image").change(function(e) {
+	var my_img = $("e.target.files[0]");
+	var reader = new FileReader();
+	if (my_img){
+		reader.readAsDataURL(my_img);
+	}
+	reader.onloadend = function(i){
+		i = reader.result;
+		var add_img = $("#writerrific_editor").add("img");
+		add_img.attr('src', i);
+		$("#writerrific_editor").append(add_img);
+		console.log(i.target.files);
+	};
+	
+});
+
 $("#font_selector").change(function() {
 	var font_name = $(this).children("option:selected").val();
 	document.execCommand("fontName", false, font_name);

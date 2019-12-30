@@ -84,11 +84,13 @@
 		</div>
 	</div>
 	
-	<div class="modal fade" id="create_project_modal" tabindex="-1" role="dialog" aria-labelledby="create_project_modalLabel">
+	<div class="modal fade" id="create_project_modal" tabindex="-1" role="dialog" aria-labelledby="create_project_modalLabel" style="font-family: 'Merriweather', serif; color:#f50000;">
 	  <div class="modal-dialog" role="document">
 		<div class="modal-content">
 		  <div class="modal-body">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span id="modal_close_btn" aria-hidden="true">&times;</span></button>
+			<div><h2>Create your story</h2></div>
+			<br>
 			{{ wtf.quick_form(form) }}
 		  </div>
 		</div>
@@ -111,7 +113,7 @@
 	{% endif %}
 	
 	{% if current_user.is_authenticated and user == current_user or current_user.is_authenticated and current_user.is_superuser() == True %}
-	<div class="modal fade" id="project_edit_modal_{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="project_{{p.id}}_edit_modalLabel">
+	<div class="modal fade" id="project_edit_modal_{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="project_{{p.id}}_edit_modalLabel" style="font-family: 'Merriweather', serif; color:#f50000;">
 	  <div class="modal-dialog" role="document">
 		<div class="modal-content">
 		  <div class="modal-body">
@@ -130,8 +132,10 @@
 			<br>
 			{{ form2.edit_cover_pic_link.label (class_='control-label') }}
 			{{ form2.edit_cover_pic_link (class_='form-control', value=p.cover_pic_link)}}
+			<br>
 			{{ form2.edit_cover_pic.label (class_='control-label') }}
 			{{ form2.edit_cover_pic  }}
+			<br>
 			{{ form2.edit_cover_pic_credit.label (class_='control-label') }}
 			{{ form2.edit_cover_pic_credit (class_='form-control', value=p.cover_pic_credit)  }}
 			<br>
@@ -175,6 +179,46 @@
 	{% endif %}
 	{% endif %}
 </div>
+{% endblock %}
+
+
+{% block styles %}
+{{super()}}
+<style>
+	.btn-default:active:hover, .btn-default:active:focus{ 
+		background-color: #ffebee;
+		
+	   }
+	.btn-default:hover, .btn-default:focus { 
+		background-color: #ffebee;
+		
+	   }
+	.btn-default:active { 
+		background-color: #ffebee;
+		
+		}
+		
+	.form-container {
+		position: absolute;
+		margin-top: 25%;
+		width: 40%;
+		margin-left: 31%;
+		color: #f50000;
+	}
+	#submit, #edit_submit {
+		color: #f50000;
+		font-size: large;
+		border-color : #f50000;
+	}
+	#register {
+		color: #f50000;
+		font-size: large;
+		border-color : #f50000;
+	}
+	.form-control {
+		border-color: #ffcdd2;
+	}
+</style>
 {% endblock %}
 
 {% block scripts %}

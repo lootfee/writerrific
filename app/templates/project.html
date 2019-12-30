@@ -154,7 +154,7 @@
 						<span class="anchor" id="{{ c.chapter_title }}_anchor"></span>
 						<section >
 							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title|safe }}</h2><span id="chapter_edit_mobile">{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}</span></header>
-								<article>
+								<article class="chapter_body">
 									{% if c.chapter_body %}
 										{{ c.chapter_body|safe }}
 									{% endif %}
@@ -300,6 +300,14 @@
 		margin-left: auto;
 		margin-right: auto;
 	}
+	article p img {
+		height: 400px;
+		width: 60vw;
+	}
+	article div img {
+		height: 400px;
+		width: 60vw;
+	}
 	.navbar-brand img {display: inline;}
 	#proj_sidenav_mobile { display: none; }
 	#chapter_edit_mobile { display: none;}
@@ -348,6 +356,9 @@
 			margin-left: 0;
 		}
 		article p img {
+			width: 90vw;
+		}
+		article div img {
 			width: 90vw;
 		}
 	}

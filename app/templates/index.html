@@ -4,7 +4,7 @@
 {% block app_content %}
 <div class="container">
 	{% if projects %}
-	<h2 style="font-family: 'Merriweather', serif;">Find something to read or {% if current_user.is_authenticated %}<button class="btn btn-default" href="#" data-toggle="modal" data-target="#create_project_modal" style="font-size:18px;font-weight:bold;font-family: 'Merriweather', serif;color:#f50000;border-color:#ffebee;">Start writing !</button>{% else %}<a href="{{ url_for('login') }}"><button class="btn btn-default" style="font-size:18px;font-weight:bold;font-family: 'Merriweather', serif;border-color:#ffebee;">Start writing !</button></a>{% endif %}</h2>
+	<h2 style="font-family: 'Merriweather', serif;">Find something to read or {% if current_user.is_authenticated %}<button class="btn btn-default" href="#" data-toggle="modal" data-target="#create_project_modal" style="font-size:18px;font-weight:bold;font-family: 'Merriweather', serif;color:#f50000;border-color:#ffebee;">Start writing !</button>{% else %}<a href="#" data-toggle="modal" data-target="#register_modal"><button class="btn btn-default" style="font-size:18px;font-weight:bold;font-family: 'Merriweather', serif;border-color:#ffebee;">Start writing !</button></a>{% endif %}</h2>
     {% for project in projects %}
 	<div class="col-md-8">
 		{% include 'stories_.html' %}
@@ -32,7 +32,9 @@
   <div class="modal-dialog" role="document">
 	<div class="modal-content">
 	  <div class="modal-body">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span id="modal_close_btn" aria-hidden="true">&times;</span></button>
+		<div><h2>Create your story</h2></div>
+		<br>
 		{{ wtf.quick_form(form) }}
 	  </div>
 	</div>
@@ -164,6 +166,34 @@ $(document).ready(function() {
 		$("#login_form").css("display", "none");
 		$("#register_form").css("display", "block");
 	});
+});
+
+$(window).on('load',function(){
+	if ($("#register_form").has("div.has-error").length !== 0){
+		$('#register_modal').modal('show');
+		$("#login_form").css("display", "none");
+		$("#register_form").css("display", "block");
+	}
+	
+	else if ($("#login_form").has("div.has-error").length !== 0){
+		$('#register_modal').modal('show');
+		$("#login_form").css("display", "block");
+		$("#register_form").css("display", "none");
+	}
+	else {
+		var modal_show = 0; //for create project modal to show only after login
+		{% if current_user.is_authenticated %}
+		var get_show_count= sessionStorage.getItem('show_modal_count')
+		if (get_show_count < 1){
+			$('#create_project_modal').modal('show');
+			modal_show += 1;
+			sessionStorage.setItem('show_modal_count', Number(modal_show));
+		}
+		{% endif %}
+	}
+	
+	
+	
 });
 
 </script>
