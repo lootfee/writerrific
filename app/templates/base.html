@@ -94,9 +94,9 @@
 			<div class="form-container" id="login_form">
 			{{ wtf.quick_form(login_form) }}
 			<br>
-			<span style="font-size:12px;">By signing in you accept our <a href="{{url_for('terms_of_service')}}" style="color:black;">Terms of Service</a> and <a href="{{url_for('privacy_policy')}}" style="color:black;">Privacy Policy</a>.</span>
+			<span id="policy_span" >By signing in you accept our <a href="{{url_for('terms_of_service')}}" style="color:black;">Terms of Service</a> and <a href="{{url_for('privacy_policy')}}" style="color:black;">Privacy Policy</a>.</span>
 			
-			<p><a href="{{ url_for('reset_password_request') }}" style="color:#f50000;font-size:12px;">Forgot Your Password? </a> <a href="#" id="register_" style="color:#f50000;font-size:12px;"> Register?</a></p>
+			<p id="forgot_password_p"><a href="{{ url_for('reset_password_request') }}" style="color:#f50000;">Forgot Your Password? </a> <a href="#" id="register_" style="color:#f50000;"> Register?</a></p>
 			
 			</div>
 		  </div>
@@ -198,7 +198,11 @@
 	}
 	#already_reg_span {
 		font-size:12px;
-		margin-left:50px;">
+		margin-left:50px;"
+	}
+	#policy_span, #forgot_password_p {
+		font-size:12px;
+		
 	}
 	#register_modal .modal-dialog {
 		top: 10px;
@@ -226,7 +230,7 @@
 			border-radius: 4px;
 			padding: 4px;
 		}
-		#already_reg_span {
+		#already_reg_span, #policy_span, #forgot_password_p {
 			margin-left: 0;
 			background: white;
 			border-radius: 4px;
