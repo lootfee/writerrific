@@ -80,15 +80,15 @@
 	{% endblock %}
 	{% if current_user.is_anonymous %}
 	<div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-labelledby="register_modalLabel">
-	  <div class="modal-dialog" role="document" style="width: 53%;height: 720px;">
+	  <div class="modal-dialog" role="document">
 		<div class="modal-content" style="position: relative;">
-			<img src="https://cdn.pixabay.com/photo/2016/10/18/20/33/bookshelves-1751334_960_720.png" style="display:inline;">
+			<img id="login_modal_img" src="https://cdn.pixabay.com/photo/2016/10/18/20/33/bookshelves-1751334_960_720.png" style="display:inline;">
 			<p class="text-center" style="font-size: 12px;">Image by <a href="https://pixabay.com/users/GDJ-1086657/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1751334" style="color:black;">Gordon Johnson</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1751334" style="color:black;">Pixabay</a></p>
 		  <div class="modal-body" style="width:100%; top: 0;position:absolute;">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<div class="form-container" id="register_form">
 			{{ wtf.quick_form(register_form) }}
-			<span style="font-size:12px;margin-left:50px;">Already registered? <a href="#" id="sign_in_" style="color: #f50000;">Sign in!</a></span>
+			<span id="already_reg_span">Already registered? <a href="#" id="sign_in_" style="color: #f50000;">Sign in!</a></span>
 			
 			</div>
 			<div class="form-container" id="login_form">
@@ -190,6 +190,48 @@
 	}
 	#register_form .form-control, #login_form .form-control {
 		color: #f50000;
+	}
+	
+	#register_modal .modal-dialog {
+		width: 53%;
+		/*height: 720px;*/
+	}
+	#already_reg_span {
+		font-size:12px;
+		margin-left:50px;">
+	}
+	
+	@media (max-width: 560px){
+		#register_modal .modal-dialog {
+			width: 90%;
+			/*height: 720px;*/
+			margin: 0 auto;
+		}
+		
+		#register_modal .modal-dialog .modal-content #login_modal_img {
+			width: 100%;
+		}
+		#register_modal .modal-dialog .modal-content .form-container {
+			font-size: 12px;
+			margin-top: 14px;
+		}
+		#register_modal .modal-dialog .modal-content .form-container .form-control {
+			height: 28px;
+		}
+		#register_modal .modal-dialog .modal-content .form-container .control-label {
+			background: white;
+			border-radius: 4px;
+			padding: 4px;
+		}
+		#already_reg_span {
+			margin-left: 0;
+			background: white;
+			border-radius: 4px;
+			padding: 4px;
+		}
+		#register_submit {
+			margin-bottom: 5px;
+		}
 	}
 	</style>
 {% endblock %}
