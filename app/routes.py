@@ -14,7 +14,10 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
-		
+	
+@app.route('/sw.js', methods=['GET'])
+def sw():
+    return app.send_static_file('sw.js')	
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
