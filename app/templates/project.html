@@ -101,7 +101,14 @@
 				<br>
 				<div class="row">
 					<div class="col-md-3">
-						<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+						<blockquote>
+							<p>
+								<a href="https://twitter.com/intent/tweet?text={{ project.title}}&via=WriterrificCo" class="twitter-share-button" data-show-count="false">
+								Tweet</a>
+							</p>
+							<link rel="canonical" href="{{url_for('project', id=project.id, title=project.title )}}">
+						</blockquote>
+						<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 					</div>
 				</div>
 				<div class="row" style="margin-bottom:20px;"></div>
