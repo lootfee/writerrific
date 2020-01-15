@@ -24,6 +24,7 @@ pagedown = PageDown(app)
 moment = Moment(app)
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
+patch_request_class(app, size=629145)
 
 if not app.debug:
 	if app.config['MAIL_SERVER']:

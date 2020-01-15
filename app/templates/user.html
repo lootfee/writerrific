@@ -119,27 +119,27 @@
 		  <div class="modal-body">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<form action method="post" class="form" enctype="multipart/form-data" role="form">
-			{{ form2.csrf_token() }}
-			{{ form2.proj_id (value=p.id)}}
+			{{ form2.csrf_token(id='csrf_token_' + p.id|string) }}
+			{{ form2.proj_id (value=p.id, id='proj_id_' + p.id|string) }}
 			{{ form2.edit_title.label (class_='control-label') }}
-			{{ form2.edit_title (class_='form-control', value=p.title) }}
+			{{ form2.edit_title (class_='form-control', value=p.title, id='edit_title_' + p.id|string ) }}
 			{{ form2.edit_genre.label (class_='control-label') }}
-			{{ form2.edit_genre (class_='form-control', value=p.pg_name) }}
+			{{ form2.edit_genre (class_='form-control', value=p.pg_name, id='edit_genre' + p.id|string ) }}
 			
 			<br>
 			{{ form2.edit_synopsis.label (class_='control-label') }}
 			<textarea class="form-control" name="edit_synopsis" cols="15" rows="8" maxlength="1000" required>{{p.synopsis}}</textarea>
 			<br>
 			{{ form2.edit_cover_pic_link.label (class_='control-label') }}
-			{{ form2.edit_cover_pic_link (class_='form-control', value=p.cover_pic_link)}}
+			{{ form2.edit_cover_pic_link (class_='form-control', value=p.cover_pic_link, id='edit_cover_pic_link' + p.id|string)}}
 			<br>
 			{{ form2.edit_cover_pic.label (class_='control-label') }}
-			{{ form2.edit_cover_pic  }}
+			{{ form2.edit_cover_pic  (id='edit_cover_pic_' + p.id|string )}}
 			<br>
 			{{ form2.edit_cover_pic_credit.label (class_='control-label') }}
-			{{ form2.edit_cover_pic_credit (class_='form-control', value=p.cover_pic_credit)  }}
+			{{ form2.edit_cover_pic_credit (class_='form-control', value=p.cover_pic_credit, id='edit_cover_pic_credit' + p.id|string )  }}
 			<br>
-			{{ form2.edit_submit (class_="btn btn-default")}}
+			{{ form2.edit_submit (class_="btn btn-default", id='edit_submit_' + p.id|string)}}
 			</form>
 		  </div>
 		</div>
@@ -223,10 +223,36 @@
 
 {% block scripts %}
 {{super()}}
-<!--set value of textarea -->
 <script>
 $(document).ready(function() {
-
+	
 });
+$("#cover_pic").on("change", function (e) {
+	var size = $(this)[0].files[0].size;
+	if (size > 629145) {
+		$(this).after("<p id='file_size_alert' class='alert alert-danger alert-dismissible' role='alert'>File size too large! Please change or edit image size.</p>");
+		$("#submit").css('display', 'none');
+	}
+	else{
+		$("#file_size_alert").css('display', 'none');
+		$("#submit").css('display', 'block');
+	}
+});
+
+{% for p in portfolio %}
+
+$("#edit_cover_pic_{{p.id}}").on("change", function () {
+var size = $(this)[0].files[0].size;
+	if (size > 629145) {
+		$(this).after("<p id='edit_file_size_alert' class='alert alert-danger alert-dismissible' role='alert'>File size too large! Please change or edit image size.</p>");
+		$("#edit_submit_{{p.id}}").css('display', 'none');
+	}
+	else{
+		$("#edit_file_size_alert").css('display', 'none');
+		$("#edit_submit_{{p.id}}").css('display', 'block');
+	}
+});
+
+{% endfor %}
 </script>
 {% endblock %}

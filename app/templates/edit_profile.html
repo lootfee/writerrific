@@ -11,24 +11,24 @@
         </div>
 		
     </div>
-    <!--h1>Edit Profile</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label (class_="control-label")}}<br>
-            {{ form.username(size=32, class_="form-control") }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.about_me.label (class_="control-label")}}<br>
-            {{ form.about_me(cols=50, rows=4, class_="form-control") }}<br>
-            {% for error in form.about_me.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit (class_="btn btn-default")}}</p>
-    </form>
-</div-->
+   
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+$("#profile_pic").on('change', function () {
+	var size = $(this)[0].files[0].size;
+	if (size > 629145) {
+		$("#profile_pic").after("<p id='file_size_alert' class='alert alert-danger alert-dismissible' role='alert'>File size too large! Please change or edit image size.</p>");
+		$("#submit").css('display', 'none');
+	}
+	else{
+		$("#file_size_alert").css('display', 'none');
+		$("#submit").css('display', 'block');
+	}
+	
+});
+
+</script>
 {% endblock %}

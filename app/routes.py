@@ -5,7 +5,8 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswor
 from app.models import User, Project, Comment, Chapter, Genre, Rating
 from datetime import datetime, timedelta
 import markdown2 
-
+import requests
+from werkzeug.urls import url_parse
 
 
 @app.before_request
@@ -27,7 +28,7 @@ def home():
 				flash('Invalid email or password')
 				return redirect(url_for('home'))
 			login_user(user, remember=login_form.remember_me.data)
-			return redirect(url_for('index'))
+			return redirect(url_for('home'))
 	elif register_form.register_submit.data:
 		if register_form.validate_on_submit():
 			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
@@ -35,7 +36,7 @@ def home():
 			db.session.add(user)
 			db.session.commit()
 			flash('Thank you for registering')
-			return redirect(url_for('index'))
+			return redirect(url_for('home'))
 	return render_template('home.html', title='Home', register_form=register_form, login_form=login_form)
 
 
@@ -48,7 +49,7 @@ def index():
 			user = User.query.filter_by(email=login_form.login_email.data).first()
 			if user is None or not user.check_password(login_form.login_password.data):
 				flash('Invalid email or password')
-				return redirect(url_for('home'))
+				return redirect(url_for('index'))
 			login_user(user, remember=login_form.remember_me.data)
 			return redirect(url_for('index'))
 	elif register_form.register_submit.data:
@@ -114,7 +115,10 @@ def login():
             flash('Invalid email or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/logout')
@@ -131,9 +135,9 @@ def privacy_policy():
 			user = User.query.filter_by(email=login_form.login_email.data).first()
 			if user is None or not user.check_password(login_form.login_password.data):
 				flash('Invalid email or password')
-				return redirect(url_for('home'))
+				return redirect(url_for('privacy_policy'))
 			login_user(user, remember=login_form.remember_me.data)
-			return redirect(url_for('index'))
+			return redirect(url_for('privacy_policy'))
 	elif register_form.register_submit.data:
 		if register_form.validate_on_submit():
 			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
@@ -141,7 +145,7 @@ def privacy_policy():
 			db.session.add(user)
 			db.session.commit()
 			flash('Thank you for registering')
-			return redirect(url_for('index'))
+			return redirect(url_for('privacy_policy'))
 	return render_template('privacy_policy.html', title='Privacy Policy', register_form=register_form, login_form=login_form)
 	
 @app.route('/terms_of_service')
@@ -153,7 +157,7 @@ def terms_of_service():
 			user = User.query.filter_by(email=login_form.login_email.data).first()
 			if user is None or not user.check_password(login_form.login_password.data):
 				flash('Invalid email or password')
-				return redirect(url_for('home'))
+				return redirect(url_for('terms_of_service'))
 			login_user(user, remember=login_form.remember_me.data)
 			return redirect(url_for('index'))
 	elif register_form.register_submit.data:
@@ -163,7 +167,7 @@ def terms_of_service():
 			db.session.add(user)
 			db.session.commit()
 			flash('Thank you for registering')
-			return redirect(url_for('index'))
+			return redirect(url_for('terms_of_service'))
 	return render_template('terms_of_service.html', title='Terms of Service', register_form=register_form, login_form=login_form)
 	
 @app.route('/register', methods=['GET', 'POST'])
@@ -186,12 +190,18 @@ def user(username):
 	login_form = LoginForm()
 	if login_form.login_submit.data:
 		if login_form.validate_on_submit():
-			login_user = User.query.filter_by(email=login_form.login_email.data).first()
-			if login_user is None or not login_user.check_password(login_form.login_password.data):
+			loginuser = User.query.filter_by(email=login_form.login_email.data).first()
+			if loginuser is None or not loginuser.check_password(login_form.login_password.data):
 				flash('Invalid email or password')
-				return redirect(url_for('home'))
-			login_user(login_user, remember=login_form.remember_me.data)
-			return redirect(url_for('index'))
+				current_page = request.url
+				if not current_page or url_parse(current_page).netloc != '':
+					next_page = url_for('index')
+				return redirect(current_page)
+			login_user(loginuser, remember=login_form.remember_me.data)
+			current_page = request.url
+			if not current_page or url_parse(current_page).netloc != '':
+				next_page = url_for('index')
+			return redirect(current_page)
 	elif register_form.register_submit.data:
 		if register_form.validate_on_submit():
 			register_user = User(username=register_form.register_username.data, email=register_form.register_email.data)
@@ -199,7 +209,10 @@ def user(username):
 			db.session.add(register_user)
 			db.session.commit()
 			flash('Thank you for registering')
-			return redirect(url_for('index'))
+			current_page = request.url
+			if not current_page or url_parse(current_page).netloc != '':
+				next_page = url_for('index')
+			return redirect(current_page)
 	user = User.query.filter_by(username=username).first_or_404()
 	portfolio = Project.query.filter_by(user_id=user.id, date_quarantined=None).order_by(Project.date_published.desc()).all()
 	for p in portfolio:
@@ -295,6 +308,8 @@ def edit_profile():
 		form.about_me.data = current_user.about_me
 		form.email.data = current_user.email
 	return render_template('edit_profile.html', title='Edit Profile', form=form)
+	
+
 						   
 @app.route('/follow/<username>')
 @login_required
@@ -360,12 +375,18 @@ def project(id, title):
 	login_form = LoginForm()
 	if login_form.login_submit.data:
 		if login_form.validate_on_submit():
-			login_user = User.query.filter_by(email=login_form.login_email.data).first()
-			if login_user is None or not login_user.check_password(login_form.login_password.data):
+			loginuser = User.query.filter_by(email=login_form.login_email.data).first()
+			if loginuser is None or not loginuser.check_password(login_form.login_password.data):
 				flash('Invalid email or password')
-				return redirect(url_for('home'))
-			login_user(login_user, remember=login_form.remember_me.data)
-			return redirect(url_for('index'))
+				current_page = request.url
+				if not current_page or url_parse(current_page).netloc != '':
+					next_page = url_for('index')
+				return redirect(current_page)
+			login_user(loginuser, remember=login_form.remember_me.data)
+			current_page = request.url
+			if not current_page or url_parse(current_page).netloc != '':
+				next_page = url_for('index')
+			return redirect(current_page)
 	elif register_form.register_submit.data:
 		if register_form.validate_on_submit():
 			register_user = User(username=register_form.register_username.data, email=register_form.register_email.data)
@@ -373,7 +394,10 @@ def project(id, title):
 			db.session.add(register_user)
 			db.session.commit()
 			flash('Thank you for registering')
-			return redirect(url_for('index'))
+			current_page = request.url
+			if not current_page or url_parse(current_page).netloc != '':
+				next_page = url_for('index')
+			return redirect(current_page)
 	project = Project.query.filter_by(id=id).first()
 	if project.cover_pic_credit:
 		project.cover_pic_cred = markdown2.markdown(project.cover_pic_credit)
@@ -386,7 +410,10 @@ def project(id, title):
 		return redirect(url_for('project', id=project.id, title=project.title))
 	for c in chapters:
 		if c.chapter_body is not None:
-			c.body = markdown2.markdown(c.chapter_body)
+			if c.date_submitted < datetime(2018, 12, 31):
+				c.body = markdown2.markdown(c.chapter_body)
+			else:
+				c.body = c.chapter_body
 	form1 = CommentReviewForm()
 	if form1.post_for_advice.data and form1.validate_on_submit():
 		project.date_seek_review = datetime.utcnow()

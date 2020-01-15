@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
+
 {% block app_content %}
 <div class="container-fluid">
 	<div id="proj_sidenav_mobile">
@@ -133,7 +134,7 @@
 			</div>
 			<div class="row" style="margin-bottom:50px;">
 				<div class="col-md-1"></div>
-				<div class="col-md-10 col-sm-12 col-xs-12">
+				<div class="col-md-10 col-sm-12 col-xs-12" style="z-index: 100;">
 					{% if project.cover_pic %}
 					<img src="{{ project.cover_pic }}" style="height:400px;width:100%;">
 					{% else %}
@@ -156,7 +157,7 @@
 							<header class="chapter_header"><li name="chapter_{{ c.chapter_no }}" style="list-style:none;"><h2>{{ c.chapter_title|safe }}</h2><span id="chapter_edit_mobile">{% if current_user.is_authenticated %}{% if project.author == current_user or current_user.is_superuser() == True %}<span style="font-size:10px;margin-right: 3px;"><a href="{{url_for('chapter', id=c.id)}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit chapter"></span></a></span><span style="font-size:10px;"><a href="#" data-toggle="modal" data-target="#delete_chapter_{{ c.id }}_modal"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="delete chapter"></span></a></span>{% endif %}{% endif %}</span></header>
 								<article class="chapter_body">
 									{% if c.chapter_body %}
-										{{ c.chapter_body|safe }}
+										{{ c.body|safe }}
 									{% endif %}
 								</article>
 							</li>
@@ -254,22 +255,41 @@
   <!--------------------------------------------------------------------------->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
-	.modal-dialog,
-	.medium-modal {
-		/* 80% of window height */
+	create_chapter_modal .modal-dialog .medium-modal {
+		/* 90% of window height */
 		height: 90%;
 		width: 60%;
 		margin: 0 auto;
 		margin-top: 10%;
 	}
 	
-	.modal-dialog,
-	.small-modal {
-		/* 80% of window height */
+	create_chapter_modal .modal-dialog .small-modal {
+		/* 60% of window height */
 		height: 60%;
 		width: 60%;
 		margin: 0 auto;
 		margin-top: 10%;
+	}
+	
+	.form-container {
+		position: absolute;
+		margin-top: 25%;
+		width: 40%;
+		margin-left: 31%;
+		color: #f50000;
+	}
+	#submit {
+		color: #f50000;
+		font-size: large;
+		border-color : #f50000;
+	}
+	#register {
+		color: #f50000;
+		font-size: large;
+		border-color : #f50000;
+	}
+	.form-control {
+		border-color: #ffcdd2;
 	}
 	
 	#publish_project {
@@ -281,7 +301,7 @@
 	font-weight: bold;
 	}
 
-	.modal-body {
+	#create_chapter_modal .modal-body, #review_modal .modal-body,  publish_modal .modal-body, dele{
 		/* 100% = dialog height, 120px = header + footer */
 		max-height: calc(100% - 20px);
 		/*overflow-y: scroll;*/
@@ -379,11 +399,11 @@
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<!--script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
 	//var quill = new Quill('#project_content');
 </script>
-<!--script>
+<script>
 $(document).ready(function() {
 	$(".sidenav_list a span").each(function() {
 		var lengthVal=($(this).text().length);
@@ -393,5 +413,32 @@ $(document).ready(function() {
 	});
 });
 </script-->
+<script>
+$(document).ready(function() {
+	$("#login_form").css("display", "none");
+	$("#sign_in_").click(function() {
+		$("#login_form").css("display", "block");
+		$("#register_form").css("display", "none");
+	});
+	$("#register_").click(function() {
+		$("#login_form").css("display", "none");
+		$("#register_form").css("display", "block");
+	});
+});
+$(window).on('load',function(){
+	if ($("#register_form").has("div.has-error").length !== 0){
+		$('#register_modal').modal('show');
+		$("#login_form").css("display", "none");
+		$("#register_form").css("display", "block");
+	}
+	
+	else if ($("#login_form").has("div.has-error").length !== 0){
+		$('#register_modal').modal('show');
+		$("#login_form").css("display", "block");
+		$("#register_form").css("display", "none");
+	}
+   
+});
 
+</script>
 {% endblock %}

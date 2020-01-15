@@ -32,10 +32,10 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
 			
 class EditProfileForm(FlaskForm):
-	username = StringField('Pen Name', validators=[DataRequired(), Length(min=4, max=45)])
+	username = StringField('Name', validators=[DataRequired(), Length(min=4, max=45)])
 	about_me = TextAreaField('About me', validators=[Length(min=0, max=500)], render_kw={'maxlength': 500, "rows": 8, "cols": 10})
 	email = StringField('Email', validators=[DataRequired(), Email()])
-	profile_pic = FileField('Upload Profile Pic:', validators=[FileAllowed(photos)])
+	profile_pic = FileField('Upload Profile Pic (600 kB max size):', validators=[FileAllowed(photos)])
 	submit = SubmitField('Submit')
 
 	def __init__(self, original_username, original_email, *args, **kwargs):
@@ -55,6 +55,10 @@ class EditProfileForm(FlaskForm):
 			if user is not None:
 				raise ValidationError('Email is already registered!')
 				
+	def validate_profile_pic_size(self):
+		if self.profile_pic.size > 629145:
+			raise ValidationError('Profile pic size too large')
+				
 class ResetPasswordRequestForm(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	submit = SubmitField('Request Password Reset')
@@ -70,7 +74,7 @@ class CreateProjectForm(FlaskForm):
 	genre = StringField('Topics', validators=[DataRequired()], render_kw={'placeholder': 'Separate each topic with a comma.'})
 	synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
 	cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
-	cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)])
+	cover_pic = FileField('Upload Cover Picture (600 kB max size):', validators=[FileAllowed(photos)])
 	cover_pic_credit = StringField('Picture credits ')
 	submit = SubmitField('Submit')
 	
@@ -81,9 +85,10 @@ class EditProjectForm(FlaskForm):
 	edit_synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
 	#edit_synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 5, "cols": 10})
 	edit_cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
-	edit_cover_pic = FileField('Upload Cover Picture:', validators=[FileAllowed(photos)])
+	edit_cover_pic = FileField('Upload Cover Picture (600 kB max size):', validators=[FileAllowed(photos)])
 	edit_cover_pic_credit = StringField('Picture credits ')
 	edit_submit = SubmitField('Save')
+	
 	
 class CreateChapterForm(FlaskForm):
 	chapter_number = IntegerField('Chapter No:', validators=[DataRequired()])
