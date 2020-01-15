@@ -103,6 +103,7 @@
 					<div class="col-md-3">
 						<blockquote>
 							<p>
+								<img src="{{ project.cover_pic }}">
 								<a href="https://twitter.com/intent/tweet?text={{ project.title}}&via=WriterrificCo" class="twitter-share-button" data-show-count="false">
 								Tweet</a>
 							</p>
@@ -261,6 +262,12 @@
   {% endif %}
   <!--------------------------------------------------------------------------->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <!---------------------------- for twitter card   --------------------------------------->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@WriterrificCo" />
+	<meta name="twitter:title" content="{{ project.title }}" />
+	<meta name="twitter:description" content="{{ project.synopsis }}" />
+	<meta name="twitter:image" content="{{ project.profile_pic }}" />
 <style>
 	create_chapter_modal .modal-dialog .medium-modal {
 		/* 90% of window height */
