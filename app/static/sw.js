@@ -1,9 +1,8 @@
 var CACHE_NAME = 'writerrific-cache-v1';
 var urlsToCache = [
-  '/',
-  '/static/icon.jpg',
-  '/static/icon2.jpg',
-  '/templates/home.html',
+  //'/',
+  '/static/ico.ico',
+  /*'/templates/home.html',
   '/templates/404.html',
   '/templates/500.html',
   '/templates/base.html',
@@ -12,7 +11,7 @@ var urlsToCache = [
   '/templates/home.html',
   '/templates/login.html',
   '/templates/stories.html',
-  '/templates/user.html'
+  '/templates/user.html'*/
 ];
 
 self.addEventListener('install', function(event) {

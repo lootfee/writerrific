@@ -248,7 +248,7 @@
 
 {{ super() }}
     {{ moment.include_moment() }}
-	{% if current_user.is_authenticated %}
+	
 	<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
 	<script>
 		window.cookieconsent.initialise({
@@ -262,12 +262,12 @@
 		  }
 		});
 	</script>
-	{% endif %}
-	<script>
+	{% if current_user.is_authenticated %}
+	<!--script>
 	$(document).ready(function() {
 		if ('serviceWorker' in navigator) {
 		  window.addEventListener('load', function() {
-			navigator.serviceWorker.register('/sw.js').then(function(registration) {
+			navigator.serviceWorker.register('../sw.js').then(function(registration) {
 			  // Registration was successful
 			  console.log('ServiceWorker registration successful with scope: ', registration.scope);
 			}, function(err) {
@@ -277,6 +277,7 @@
 		  });
 		}
 	});
-	</script>
+	</script-->
+	{% endif %}
 {% endblock %}
 

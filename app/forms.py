@@ -73,8 +73,8 @@ class CreateProjectForm(FlaskForm):
 	title = StringField('Title', validators=[DataRequired()])
 	genre = StringField('Topics', validators=[DataRequired()], render_kw={'placeholder': 'Separate each topic with a comma.'})
 	synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
-	cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
-	cover_pic = FileField('Upload Cover Picture (600 kB max size):', validators=[FileAllowed(photos)])
+	cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link here.'})
+	#cover_pic = FileField('Upload Cover Picture (600 kB max size):', validators=[FileAllowed(photos)])
 	cover_pic_credit = StringField('Picture credits ')
 	submit = SubmitField('Submit')
 	
@@ -84,8 +84,8 @@ class EditProjectForm(FlaskForm):
 	edit_genre = StringField('Topics', validators=[DataRequired()])
 	edit_synopsis = TextAreaField('Introduction', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, 'placeholder': 'Maximum 1000 characters.'})
 	#edit_synopsis = TextAreaField('Synopsis', validators=[DataRequired(), Length(min=1, max=1000)], render_kw={'maxlength': 1000, "rows": 5, "cols": 10})
-	edit_cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link or upload a pic below.'})
-	edit_cover_pic = FileField('Upload Cover Picture (600 kB max size):', validators=[FileAllowed(photos)])
+	edit_cover_pic_link = StringField('Paste Cover Picture Link', render_kw={'placeholder': 'Paste your cover picture link here.'})
+	#edit_cover_pic = FileField('Upload Cover Picture (600 kB max size):', validators=[FileAllowed(photos)])
 	edit_cover_pic_credit = StringField('Picture credits ')
 	edit_submit = SubmitField('Save')
 	
