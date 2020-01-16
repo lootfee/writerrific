@@ -193,9 +193,13 @@
 	}
 	
 	#register_modal .modal-dialog {
-		width: 53%;
+		width: 56%;
 		/*height: 720px;*/
 	}
+	#register_modal .modal-dialog .modal-content #login_modal_img {
+			width: 100%;
+			//height: 520px;
+		}
 	#already_reg_span {
 		font-size:12px;
 		margin-left:50px;"
@@ -211,12 +215,13 @@
 	@media (max-width: 560px){
 		#register_modal .modal-dialog {
 			width: 90%;
-			/*height: 720px;*/
+			
 			margin: 0 auto;
 		}
 		
 		#register_modal .modal-dialog .modal-content #login_modal_img {
 			width: 100%;
+			height: 420px;
 		}
 		#register_modal .modal-dialog .modal-content .form-container {
 			font-size: 12px;
@@ -262,7 +267,7 @@
 		  }
 		});
 	</script>
-	{% if current_user.is_authenticated %}
+	
 	<!--script>
 	$(document).ready(function() {
 		if ('serviceWorker' in navigator) {
@@ -278,6 +283,6 @@
 		}
 	});
 	</script-->
-	{% endif %}
+	
 {% endblock %}
 
