@@ -1,0 +1,140 @@
+2020-01-21 21:05:52,800 INFO: Writerrific startup [in C:\MAMP\htdocs\sulaterous\app\__init__.py:51]
+2020-01-21 21:06:11,456 ERROR: Exception on /None [GET] [in c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py:1891]
+Traceback (most recent call last):
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\werkzeug\routing.py", line 1799, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1815, in handle_user_exception
+    return self.handle_http_exception(e)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1743, in handle_http_exception
+    return handler(e)
+  File "C:\MAMP\htdocs\sulaterous\app\errors.py", line 6, in not_found_error
+    return render_template('404.html'), 404
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "C:\MAMP\htdocs\sulaterous\app\templates\404.html", line 2, in top-level template code
+    {% import 'bootstrap/wtf.html' as wtf %}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\environment.py", line 1005, in render
+    return concat(self.root_render_func(self.new_context(vars)))
+  File "C:\MAMP\htdocs\sulaterous\app\templates\404.html", line 17, in root
+  File "C:\MAMP\htdocs\sulaterous\app\templates\base.html", line 51, in root
+    {% else %}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 10, in root
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 20, in block_doc
+    {% block body -%}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 39, in block_html
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 90, in block_body
+  File "C:\MAMP\htdocs\sulaterous\app\templates\base.html", line 81, in block_navbar
+    {% if current_user.is_anonymous %}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 262, in call
+    return __obj(*args, **kwargs)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 570, in __call__
+    return self._invoke(arguments, autoescape)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\asyncsupport.py", line 110, in _invoke
+    return original_invoke(self, arguments, autoescape)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 574, in _invoke
+    rv = self._func(*arguments)
+  File "C:\MAMP\htdocs\sulaterous\app\templates\base.html", line 27, in macro
+    <span class="sr-only">Toggle navigation</span>
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 262, in call
+    return __obj(*args, **kwargs)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 630, in _fail_with_undefined_error
+    raise self._undefined_exception(hint)
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'endswith'
+2020-01-21 21:10:05,663 ERROR: Exception on /None [GET] [in c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py:1891]
+Traceback (most recent call last):
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\werkzeug\routing.py", line 1799, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1815, in handle_user_exception
+    return self.handle_http_exception(e)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\app.py", line 1743, in handle_http_exception
+    return handler(e)
+  File "C:\MAMP\htdocs\sulaterous\app\errors.py", line 6, in not_found_error
+    def not_found_error(error):
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "C:\MAMP\htdocs\sulaterous\app\templates\404.html", line 2, in top-level template code
+    {% import 'bootstrap/wtf.html' as wtf %}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\environment.py", line 1005, in render
+    return concat(self.root_render_func(self.new_context(vars)))
+  File "C:\MAMP\htdocs\sulaterous\app\templates\404.html", line 17, in root
+  File "C:\MAMP\htdocs\sulaterous\app\templates\base.html", line 51, in root
+    {% else %}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 10, in root
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 20, in block_doc
+    {% block body -%}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 39, in block_html
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 90, in block_body
+  File "C:\MAMP\htdocs\sulaterous\app\templates\base.html", line 81, in block_navbar
+    {% if current_user.is_anonymous %}
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 262, in call
+    return __obj(*args, **kwargs)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 570, in __call__
+    return self._invoke(arguments, autoescape)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\asyncsupport.py", line 110, in _invoke
+    return original_invoke(self, arguments, autoescape)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 574, in _invoke
+    rv = self._func(*arguments)
+  File "C:\MAMP\htdocs\sulaterous\app\templates\base.html", line 27, in macro
+    <span class="sr-only">Toggle navigation</span>
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 262, in call
+    return __obj(*args, **kwargs)
+  File "c:\mamp\htdocs\sulaterous\venv\lib\site-packages\jinja2\runtime.py", line 630, in _fail_with_undefined_error
+    raise self._undefined_exception(hint)
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'endswith'
+2020-01-21 21:10:18,349 INFO: Writerrific startup [in C:\MAMP\htdocs\sulaterous\app\__init__.py:51]

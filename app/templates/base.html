@@ -8,15 +8,17 @@
 	{% endif %}
 {% endblock %}
 
+
+<!--     not used having error in errors page >
 {% macro nav_link(endpoint, name) %}
 {% if request.endpoint.endswith(endpoint) %}
 	
 <li class="active"><a href="{{ url_for(endpoint) }}">{{name}}</a></li>
 {% else %}
-  <li><a href="{{ url_for(endpoint) }}">{{name}}</a></li>
+ <li><a href="{{ url_for(endpoint) }}">{{name}}</a></li>
 {% endif %}
 {% endmacro %}
-
+------------------------------------------------------------->
 
 {% block navbar %}
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -35,7 +37,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-		{{ nav_link('index', 'Explore') }}
+		<li><a href="{{ url_for('index') }}">Explore</a></li>
       </ul>
 	  {% if users %}
       <form class="navbar-form navbar-left">
