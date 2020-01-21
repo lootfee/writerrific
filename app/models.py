@@ -4,6 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
 from math import sqrt
+import jwt
+from time import time
+from hashlib import md5
 
 @login.user_loader
 def load_user(id):
