@@ -1,9 +1,9 @@
 <div style="font-family: 'Merriweather', serif; border:1px solid; border-radius: 5px; margin-top:15px;margin-bottom:15px; padding: 15px;border-color: #ffebee;">
 	<div class="row" style="margin-top: 15px; margin-bottom: 15px;">
-		<div class="col-md-2" style="width:10%;">
+		<div class="col-md-2 col-sm-3 col-xs-3">
 			{% if project.author.profile_pic %}<img src="{{ project.author.profile_pic }}" alt="author profile pic" style="width:64px;height:64px;border-radius:35px;border:2px solid #b71c1c;">{% endif %}
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-6 col-sm-6 col-xs-6">
 			<a href="{{ url_for('user', username=project.author.username) }}" style="color:black;">
 				<span class="author-username">{{ project.author.username }} </span>
 			</a>
@@ -12,7 +12,7 @@
 				<span class="col-md-10"></span>
 			
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 col-sm-3 col-xs-3">
 			{% if project.date_published %}
 			{% if project.ratings %}
 			<span>
@@ -28,7 +28,7 @@
 				</div>
 			</span>
 		</div>
-		<div class="col-md-5"></div>
+		
 	</div>
 	<div class="row">
 		{% if project.cover_pic %}

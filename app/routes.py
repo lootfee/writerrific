@@ -8,6 +8,8 @@ from app.email import send_password_reset_email
 import markdown2 
 import requests
 from werkzeug.urls import url_parse
+from oauth import OAuthSignIn
+import json
 
 
 @app.before_request
@@ -18,7 +20,8 @@ def before_request():
 	
 @app.route('/sw.js', methods=['GET'])
 def sw():
-    return app.send_static_file('sw.js')	
+    return app.send_static_file('sw.js')
+	
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
@@ -138,7 +141,39 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))	
+    return redirect(url_for('index'))
+
+@app.route('/authorize/<provider>')
+def oauth_authorize(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+
+
+@app.route('/callback/<provider>')
+def oauth_callback(provider):
+	if not current_user.is_anonymous:
+		return redirect(url_for('index'))
+	oauth = OAuthSignIn.get_provider(provider)
+	social_id, username, email = oauth.callback()
+	if social_id is None:
+		flash('Authentication failed.')
+		return redirect(url_for('index'))
+	if provider == 'facebook':
+		user = User.query.filter_by(facebook_id=social_id).first()
+		if not user:
+			user = User(facebook_id=social_id, username=username, email=email)
+			db.session.add(user)
+			db.session.commit()
+	if provider == 'twitter':
+		user = User.query.filter_by(twitter_id=social_id).first()
+		if not user:
+			user = User(twitter_id=social_id, username=username, email=email)
+			db.session.add(user)
+			db.session.commit()
+	login_user(user, True)
+	return redirect(url_for('index'))	
 	
 @app.route('/privacy_policy')
 def privacy_policy():

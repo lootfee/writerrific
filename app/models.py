@@ -49,6 +49,8 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 	profile_pic = db.Column(db.String(1000))
+	facebook_id = db.Column(db.String(128))
+	twitter_id = db.Column(db.String(128))
 	project = db.relationship('Project', backref='author', lazy='dynamic')
 	chapter = db.relationship('Chapter', backref='author', lazy='dynamic')
 	comment = db.relationship('Comment', backref='author', lazy='dynamic')
@@ -96,7 +98,7 @@ class User(UserMixin, db.Model):
 		return jwt.encode(
 			{'reset_password': self.id, 'exp': time() + expires_in},
 			app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
-			
+					
 				
 	@staticmethod
 	def verify_reset_password_token(token):

@@ -13,7 +13,9 @@
 
 	<div class="jumbotron">
 	  <p>Amateur authors can publish and seek advice for their books. It can also be used by aspiring journalists and bloggers to share their content and even for scientists to publish their journals.</p>
-	  
+	  {% for g in get_pic %}
+		<p>{{ g }}</p>
+	  {% endfor%}
 	  <!--p>Contents are created thru markdown which makes them easily customizable and you can add images and even videos.</p>
 	  <p> You an access a markdown cheatsheet <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.</p-->
 	  <!--p><a href="{{url_for('register')}}"><button class="btn btn-primary btn-lg" id="join-us-btn" >Join us</button></a> and be part of our pioneer authors and readers.</p-->

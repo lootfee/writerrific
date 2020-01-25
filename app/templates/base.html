@@ -37,7 +37,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-		<li><a href="{{ url_for('index') }}">Explore</a></li>
+		<li><a href="{{ url_for('index') }}">Front Page</a></li>
       </ul>
 	  {% if users %}
       <form class="navbar-form navbar-left">
@@ -63,8 +63,7 @@
 {% block content %}
 		<!-- facebook js sdk-->
 		<div id="fb-root"></div>
-		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0"></script>
-
+		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0"></script>
 		{% with messages = get_flashed_messages() %}
 		{% if messages %}
 		<div class="container">
@@ -91,10 +90,13 @@
 			<div class="form-container" id="register_form">
 			{{ wtf.quick_form(register_form) }}
 			<span id="already_reg_span">Already registered? <a href="#" id="sign_in_" style="color: #f50000;">Sign in!</a></span>
+			<!--a href="{{ url_for('oauth_authorize', provider='facebook') }}"><img src="https://scontent.ffjr1-1.fna.fbcdn.net/v/t39.2365-6/17639236_1785253958471956_282550797298827264_n.png?_nc_cat=105&amp;_nc_ohc=OByjKA7UPO8AX8fJOcp&amp;_nc_ht=scontent.ffjr1-1.fna&amp;oh=26cdea3137882cd219ea6ba5ec1b678b&amp;oe=5E8E51EA" width="180px;"></a-->
 			
 			</div>
 			<div class="form-container" id="login_form">
 			{{ wtf.quick_form(login_form) }}
+			<br>
+			<!--a  href="{{ url_for('oauth_authorize', provider='facebook') }}"><img src="https://scontent.ffjr1-1.fna.fbcdn.net/v/t39.2365-6/17639236_1785253958471956_282550797298827264_n.png?_nc_cat=105&amp;_nc_ohc=OByjKA7UPO8AX8fJOcp&amp;_nc_ht=scontent.ffjr1-1.fna&amp;oh=26cdea3137882cd219ea6ba5ec1b678b&amp;oe=5E8E51EA" width="180px;"></a-->
 			<br>
 			<span id="policy_span" >By signing in you accept our <a href="{{url_for('terms_of_service')}}" style="color:black;">Terms of Service</a> and <a href="{{url_for('privacy_policy')}}" style="color:black;">Privacy Policy</a>.</span>
 			
@@ -214,6 +216,10 @@
 		top: 10px;
 	}
 	
+	.btn_facebook {
+		background-color: #1877f2;
+	}
+	
 	@media (max-width: 560px){
 		#register_modal .modal-dialog {
 			width: 90%;
@@ -269,7 +275,30 @@
 		  }
 		});
 	</script>
-	
+	<script>
+		FB.getLoginStatus(function(response) {
+		statusChangeCallback(response);
+	});
+	function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+    console.log('statusChangeCallback');
+    console.log(response);                   // The current login status of the person.
+    if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+      testAPI();  
+    } else {                                 // Not logged into your webpage or we are unable to tell.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this webpage.';
+    }
+  }
+  
+  function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+	</script>
 	<!--script>
 	$(document).ready(function() {
 		if ('serviceWorker' in navigator) {
