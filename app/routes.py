@@ -32,7 +32,7 @@ def home():
 				flash('Invalid email or password')
 				return redirect(url_for('home'))
 			login_user(user, remember=login_form.remember_me.data)
-			return redirect(url_for('home'))
+			return redirect(url_for('index'))
 	elif register_form.register_submit.data:
 		if register_form.validate_on_submit():
 			user = User(username=register_form.register_username.data, email=register_form.register_email.data)
@@ -40,7 +40,7 @@ def home():
 			db.session.add(user)
 			db.session.commit()
 			flash('Thank you for registering')
-			return redirect(url_for('home'))
+			return redirect(url_for('index'))
 	return render_template('home.html', title='Home', register_form=register_form, login_form=login_form)
 
 
@@ -138,7 +138,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('home'))	
+    return redirect(url_for('index'))	
 	
 @app.route('/privacy_policy')
 def privacy_policy():
@@ -252,10 +252,10 @@ def user(username):
 			genres = form.genre.data
 			genre_list = genres.split(',')
 			proj = Project(title=form.title.data, synopsis=form.synopsis.data, user_id=current_user.id)
-			if form.cover_pic.data:
+			'''if form.cover_pic.data:
 				cover_pic_filename = photos.save(form.cover_pic.data)
-				proj.cover_pic = photos.url(cover_pic_filename)
-			elif form.cover_pic_link.data:
+				proj.cover_pic = photos.url(cover_pic_filename)'''
+			if form.cover_pic_link.data:
 				proj.cover_pic_link = form.cover_pic_link.data
 			if form.cover_pic_credit.data:
 				proj.cover_pic_credit = form.cover_pic_credit.data
@@ -277,14 +277,12 @@ def user(username):
 			edit_proj = Project.query.filter_by(id=form2.proj_id.data).first()
 			edit_proj.title = form2.edit_title.data
 			edit_proj.synopsis = form2.edit_synopsis.data
-			print(form2.edit_cover_pic.data)
-			if form2.edit_cover_pic.data:
+			'''if form2.edit_cover_pic.data:
 				edit_cover_pic_filename = photos.save(form2.edit_cover_pic.data)
 				edit_proj.cover_pic = photos.url(edit_cover_pic_filename)
-				print(form2.edit_cover_pic.data)
-			elif form2.edit_cover_pic_link.data:
+				print(form2.edit_cover_pic.data)'''
+			if form2.edit_cover_pic_link.data:
 				edit_proj.cover_pic_link = form2.edit_cover_pic_link.data
-				print('form2')
 			edit_proj.cover_pic_credit = form2.edit_cover_pic_credit.data
 			db.session.commit()
 			edit_genres = form2.edit_genre.data
