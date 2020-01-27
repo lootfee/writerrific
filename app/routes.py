@@ -23,7 +23,7 @@ def sw():
     return app.send_static_file('sw.js')
 	
 
-@app.route('/', methods=['GET', 'POST'])
+
 @app.route('/home', methods=['GET', 'POST'])
 def home():
 	register_form = RegistrationForm()
@@ -45,8 +45,9 @@ def home():
 			flash('Thank you for registering')
 			return redirect(url_for('index'))
 	return render_template('home.html', title='Home', register_form=register_form, login_form=login_form)
+	
 
-
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/explore', methods=['GET', 'POST'])
 def index():
 	register_form = RegistrationForm()
