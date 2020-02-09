@@ -1,11 +1,13 @@
 <div style="font-family: 'Merriweather', serif; border:1px solid; border-radius: 5px; margin-top:15px;margin-bottom:15px; padding: 15px;border-color: #ffebee;">
 	<div class="row" style="margin-top: 15px; margin-bottom: 15px;">
 		<div class="col-md-2 col-sm-3 col-xs-3">
-			{% if project.author.profile_pic %}<img src="{{ project.author.profile_pic }}" alt="author profile pic" style="width:64px;height:64px;border-radius:35px;border:2px solid #b71c1c;">{% endif %}
+			{% if project.author.profile_pic %}<img src="{{ project.author.profile_pic }}" alt="author profile pic" style="width:64px;height:64px;border-radius:35px;border:2px solid #b71c1c; float: right;">{% endif %}
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-6">
 			<a href="{{ url_for('user', username=project.author.username) }}" style="color:black;">
 				<span class="author-username">{{ project.author.username }} </span>
+				{% if current_user.is_authenticated %}{% if current_user.is_superuser() == True %}<span><a href="{{url_for('quarantine_project', id=project.id)}}"> Quarantine </a></span><span><a href="{{url_for('unpublish_project', id=project.id)}}"> Unpublish </a></span>{% endif %}{% endif %}
+
 			</a>
 				<br>
 				<span> {{ moment(project.date_published).format('ll') }}</span>
