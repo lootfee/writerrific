@@ -18,7 +18,7 @@ class RegistrationForm(FlaskForm):
     register_email = StringField('Email', validators=[DataRequired(), Email()])
     register_password = PasswordField('Password', validators=[DataRequired(), Regexp(regex=r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])', message="Password must be at least 8 characters long, must contain an uppercase letter, a number and a special character.")])
     register_password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+        'Repeat Password', validators=[DataRequired(), EqualTo('register_password')])
     register_submit = SubmitField('Register')
 
     def validate_username(self, username):
