@@ -73,9 +73,10 @@ def index():
 		genres = form.genre.data
 		genre_list = genres.split(',')
 		proj = Project(title=form.title.data, synopsis=form.synopsis.data, user_id=current_user.id)
-		if form.cover_pic.data:
-			cover_pic_filename = photos.save(form.cover_pic.data)
-			proj.cover_pic = photos.url(cover_pic_filename)
+		if form.cover_pic_link.data:
+			#cover_pic_filename = photos.save(form.cover_pic.data)
+			#proj.cover_pic = photos.url(cover_pic_filename)
+			proj.cover_pic_link = form.cover_pic_link.data
 		if form.cover_pic_credit.data:
 			proj.cover_pic_credit = form.cover_pic_credit.data
 		db.session.add(proj)
